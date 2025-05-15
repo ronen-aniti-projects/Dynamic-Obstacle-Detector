@@ -1,6 +1,7 @@
-# Demonstrating Optical Flow to Identify Dynamic Obstacles from Raw Camera Images from Turtle Bot Robot
+# Demonstrating an Established Optical-Flow-Based Method for Mobile Robot Dynamic Obstacle Detection 
 
 ## Purpose
+With this project, I demonstrate an established approach, based on the computational method of optical flow, to the problem of dynamic obstacle detection. This project is the culmination of two weeks work as a student in ENPM673 (Perception for Autonomous Robotics) at the University of Maryland, College Park. 
 
 ## The Basic Premise
 The approach is premised on the following: 
@@ -19,7 +20,7 @@ The implementation involved the following:
 
 ## The Results and The Challenges
 We are realizing the following results and challenges:
-* In repeated trials in simulation tool Gazebo, we have realized accurate dynamic obstacle detection with no false positives. This is demonstrated by the ROS2 node flagging the robot’s approach to the moving obstacle soda can as being unsafe but not flagging any other scenes as being unsafe. 
+* In repeated trials in simulation tool Gazebo, we have realized accurate dynamic obstacle detection with no false positives. This is demonstrated by the ROS2 node flagging the robot’s approach to the moving obstacle soda can as being `unsafe` but not flagging any other scenes as being `unsafe`. 
 * The fact that our implementation relies on static thresholding for the RANSAC affine fitting step and for the final decision maker step means results will always be scene dependent and will always require parameter tuning. 
     * For example, we have found that the increasing the RANSAC inlier threshold reduces false positives at the sacrifice of not always detecting true dynamic obstacle motion. 
     * Moreover, we have realized that lowering the threshold requirement for mask inliers increases the frequency of false detections.
