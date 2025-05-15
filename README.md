@@ -1,13 +1,16 @@
 # Demonstrating an Established Optical-Flow-Based Method for Mobile Robot Dynamic Obstacle Detection 
 
 ## Purpose
-With this project, I demonstrate an established approach, based on the computational method of optical flow, to the problem of dynamic obstacle detection. This project is the culmination of two weeks work as a student in ENPM673 (Perception for Autonomous Robotics) at the University of Maryland, College Park. 
+TODO: Explain how this project is the result of a two week assignment for a graduate course on robot perception. 
 
 ## The Basic Premise
 The approach is premised on the following: 
 * The mathematical technique of dense optical flow provides an estimation of pixel motion between robot camera images taken closely together in time. The technique takes as input two such frames and produces as output a field of R2 vectors showing pixel translational motion. The pixel motion is caused by relative motion between the robot camera and all of the objects in the robot’s scene. 
 * It has been shown in the literature that if we assume that this relative motion is caused only by the rotation and translation of the robot’s camera and that the robot’s camera scene is largely planar, then the optical flow field can be approximated by a single affine transformation (linear transformation plus translation).
 * If we reproject all pixels from the first frame with the approximation affine transformation and compare their landing spots with the landing spots computed with a dense optical flow algorithm, then we reveal all segments of the image that deviate from our assumptions, providing a way of dynamic obstacle detection even when the robot itself is moving.
+
+## The Mathematics that Explain the Premise
+TODO: Show why an affine does well to approximate a robot's own ego motion when the above conditions hold. 
 
 ## The Implementation
 The implementation involved the following:
