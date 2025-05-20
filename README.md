@@ -1,7 +1,7 @@
 # Demonstrating an Established Optical-Flow-Based Method for Mobile Robot Dynamic Obstacle Detection 
 
 ## Purpose
-TODO: Explain how this project is the result of a two week assignment for a graduate course on robot perception. 
+TODO: Explain how this project is the result of a two week assignment for a  course on robot perception. 
 
 ## The Basic Premise
 The approach is premised on the following: 
@@ -13,12 +13,14 @@ The approach is premised on the following:
 The mathematics that explain the premise involves deriving a homographic transformation to describe how the pixel representation of a given planar scene changes between optical flow images taken closely together in time, then reducing this homographic transformation into an affine transformation leveraging that the robot camera moves between frames but that the camera rotation only involves yaw.
 
 * We begin by lifting all pixels belonging to the planar scene into the image plane via the camera intrinsics.
+
 $$ \mathbf{X}_{C1}' = K^{-1} \mathbf{x}_1 $$
 
-* The result is a ray indicating 3D direction in the reference frame of the camera before the motion step. We multiply this ray by the constant $Z_{C1}$ to indicate a 3D image point. 
+* The result is a ray indicating 3D direction in the reference frame of the camera before the motion step. We multiply this ray by the constant $ Z_{C1} $ to indicate a 3D image point. 
+
 $$ \mathbf{X}_{C1} = Z_{C1} \mathbf{X}_{C1}' = Z_{C1} K^{-1} \mathbf{x}_1 $$
 
-* Employing the fact that all points being transformed belong to the same plane, $\mathbf{n}^T \mathbf{X}_{C1} = d$, we draw the following sequence to eliminate the $Z_{C1}$ ambiguity. 
+* Employing the fact that all points being transformed belong to the same plane, $ \mathbf{n}^T \mathbf{X}_{C1} = d $, we draw the following sequence to eliminate the $Z_{C1}$ ambiguity. 
 
 $$ \mathbf{n}_{C1}^T (Z_{C1} K^{-1} \mathbf{x}_1) = d $$
 
@@ -30,7 +32,7 @@ $$ \mathbf{X}_{C1} = \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x
 
 $$ \mathbf{X}_{C2} = \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} $$
 
-* We then introduce the structure for the homography by passing $\mathbf{X}_{C2}$ through the camera intrinsics, then perform a sequence of algebriac simplifactions to draw out then remove unecessary constants and express a proper homography.
+* We then introduce the structure for the homography by passing $ \mathbf{X}_{C2} $ through the camera intrinsics, then perform a sequence of algebriac simplifactions to draw out then remove unecessary constants and express a proper homography.
 
 $$ \mathbf{x}_2 \sim K \left( \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} \right) $$
 
@@ -74,6 +76,7 @@ $$ \mathbf{x}_2 \sim \begin{bmatrix} f_x & s & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1
 
 $$ \mathbf{x}_2 \sim \begin{bmatrix} A_1 & A_2 & A_3 \\ A_4 & A_5 & A_6 \\ 0 & 0 & 1 \end{bmatrix} \mathbf{x}_1 $$
 
+With our approach, we develop a new affine transformation computationally at each image processing step, then we assert that all pixels should move according to this affine rule, with pixels deviating from this rule being indicative of relative motion between the robot camera and the capture scene that is not explained by the robot's own motion so thus must be belonging to a dynamic obstacle.
 
 TODO: Show why an affine does well to approximate a robot's own ego motion when the above conditions hold. 
 
