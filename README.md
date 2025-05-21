@@ -14,7 +14,10 @@ The mathematics that explain the premise involves deriving a homographic transfo
 
 * We begin by lifting all pixels belonging to the planar scene into the image plane via the camera intrinsics.
 
-$$ \mathbf{X}_{C1}' = K^{-1} \mathbf{x}_1 $$
+<p align="center">
+  <img src="docs/eq1.svg" alt="Equation" width="125">
+</p>
+aaav
 
 * The result is a ray indicating 3D direction in the reference frame of the camera before the motion step. We multiply this ray by the constant $ Z_{C1} $ to indicate a 3D image point. 
 
@@ -100,13 +103,13 @@ We are realizing the following results and challenges:
     * Think of several dozen moving soda cans flooding the robot’s field of view. If this were to happen, the affine fit representing the robot’s own “ego” motion would too much be actually modeling the motion of dynamic obstacles.
 
 ### Result Case 1. Robot stationary and dynamic obstacle present.
-![Result1](result2.png)
+![Result1](docs/result2.png)
 
 ### Result Case 2. Robot moving and dynamic obstacle present
-![Result2](result1.png)
+![Result2](docs/result1.png)
 
 ### Result Case 3. Robot moving and dynamic obstacle present 
-![Result3](result3.png)
+![Result3](docs/result3.png)
 
 ## The Conclusion
 * In conclusion, we have validated a well-established conceptual framework for dynamic obstacle detection–one that centers on operating on the direct comparison between computed, apparent dense optical flow and a RANSAC-fitted affine transformation summarizing the “gist” of this dense flow field. That being said, while our results have been intriguing, a truly robust, practical rendition–immune to changes in scene and free from guess and check hard-coded parameter settings–would require additional time researching and understanding more of what’s already been achieved in the literature and in industry. 
