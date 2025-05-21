@@ -18,26 +18,26 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq1.svg" alt="Equation1" width="100">
 </p>
 
-* The result is a ray indicating 3D direction in the reference frame of the camera before the motion step. We multiply this ray by the constant $ Z_{C1} $ to indicate a 3D image point. 
+* The result is a ray indicating 3D direction in the reference frame of the camera before the motion step. We multiply this ray by the constant <img src="docs/zc1.svg" alt="ZC1" height="12"> to indicate a 3D image point. 
 
 <p align="center">
   <img src="docs/eq2.svg" alt="Equation2" width="190">
 </p>
 
 
-* Employing the fact that all points being transformed belong to the same plane, $ \mathbf{n}^T \mathbf{X}_{C1} = d $, we draw the following sequence to eliminate the $Z_{C1}$ ambiguity. 
+* Employing the fact that all points being transformed belong to the same plane, <img src="docs/plane.svg" alt="plane" height="15">, we draw the following sequence to eliminate the <img src="docs/zc1.svg" alt="ZC1" height="12"> ambiguity. 
 
 <p align="center">
   <img src="docs/eq3.svg" alt="Equation3" width="175">
 </p>
 
-* With the $Z_{C1}$ ambiguity eliminated, we proceed to model the effect of the camera's between-frame rigid body motion to express the mapping from the original pixel coordinates to post-motion coordinates in the new camera reference frame.  
+* With the <img src="docs/zc1.svg" alt="ZC1" height="12"> ambiguity eliminated, we proceed to model the effect of the camera's between-frame rigid body motion to express the mapping from the original pixel coordinates to post-motion coordinates in the new camera reference frame.  
 
 <p align="center">
-  <img src="docs/eq4.svg" alt="Equation4" width="200">
+  <img src="docs/eq4.svg" alt="Equation4" width="210">
 </p>
 
-* We then introduce the structure for the homography by passing $ \mathbf{X}_{C2} $ through the camera intrinsics, then perform a sequence of algebriac simplifactions to draw out then remove unecessary constants and express a proper homography.
+* We then introduce the structure for the homography by passing  <img src="docs/xc2.svg" alt="XC2" height="12"> through the camera intrinsics, then perform a sequence of algebriac simplifactions to draw out then remove unecessary constants and express a proper homography.
 
 <p align="center">
   <img src="docs/eq5.svg" alt="Equation5" width="400">
