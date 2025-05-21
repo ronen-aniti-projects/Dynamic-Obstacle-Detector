@@ -46,15 +46,14 @@ The mathematics that explain the premise involves deriving a homographic transfo
 
 * For the next step of the mathematical explanation of the premise, we recognize that the robot only has time to perform small rotations between successive image captures. This leads to a new expression for the homography, after expanding a general roll-pitch-yaw rotation matrix and deriving its first-order Taylor approximation. 
 
-$$ \mathbf{R} = \mathbf{R}_x(\theta_x) \mathbf{R}_y(\theta_y) \mathbf{R}_z(\theta_z) $$
+<p align="center">
+  <img src="docs/R.svg" alt="Rotation" width="325">
+</p>
 
-$$ \mathbf{R} = \begin{bmatrix} \cos \theta_y \cos \theta_z & -\cos \theta_y \sin \theta_z & \sin \theta_y \\ \cos \theta_x \sin \theta_z + \sin \theta_x \sin \theta_y \cos \theta_z & \cos \theta_x \cos \theta_z - \sin \theta_x \sin \theta_y \sin \theta_z & -\sin \theta_x \cos \theta_y \\ \sin \theta_x \sin \theta_z - \cos \theta_x \sin \theta_y \cos \theta_z & \sin \theta_x \cos \theta_z + \cos \theta_x \sin \theta_y \sin \theta_z & \cos \theta_x \cos \theta_y \end{bmatrix} $$
 
-$$ \mathbf{R} \approx \begin{bmatrix} 1 & -\theta_z & \theta_y \\ \theta_z & 1 & -\theta_x \\ -\theta_y & \theta_x & 1 \end{bmatrix} $$
 
 * Furthremore, roll and pitch are assumed to be zero and the perpendicular distance to the plane is safely assumed to be much larger than the z-axis translation that occurs between successive image captures. 
 
-$$ \mathbf{R} \approx \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} $$
 
 $$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
 
@@ -65,6 +64,8 @@ $$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 
 $$ \mathbf{x}_2 \sim K \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ \frac{t_z n_x}{d} & \frac{t_z n_y}{d} & 1 + \frac{t_z n_z}{d} \end{bmatrix} K^{-1} \mathbf{x}_1 $$
 
 $$ \mathbf{x}_2 \sim K \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ 0 & 0 & 1 \end{bmatrix} K^{-1} \mathbf{x}_1 $$
+
+* We notice that when expanded, the form is still affine. 
 
 $$ \mathbf{x}_2 \sim \begin{bmatrix} f_x & s & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1/f_x & -s/(f_x f_y) & (s c_y - f_y c_x)/(f_x f_y) \\ 0 & 1/f_y & -c_y/f_y \\ 0 & 0 & 1 \end{bmatrix} \mathbf{x}_1 $$
 
@@ -106,7 +107,10 @@ We are realizing the following results and challenges:
 * In conclusion, we have validated a well-established conceptual framework for dynamic obstacle detection–one that centers on operating on the direct comparison between computed, apparent dense optical flow and a RANSAC-fitted affine transformation summarizing the “gist” of this dense flow field. That being said, while our results have been intriguing, a truly robust, practical rendition–immune to changes in scene and free from guess and check hard-coded parameter settings–would require additional time researching and understanding more of what’s already been achieved in the literature and in industry. 
 
 ## References
-1. https://oa.upm.es/21899/1/GONZALO_RUY_RODRIGUEZ_CANOSA.pdf   
-2. https://www.r-5.org/files/books/computers/algo-list/image-processing/vision/Richard_Hartley_Andrew_Zisserman-Multiple_View_Geometry_in_Computer_Vision-EN.pdf
-3. http://users.ece.northwestern.edu/~yingwu/teaching/EECS432/Notes/optical_flow.pdf
-4. https://www.weizmann.ac.il/math/ronen/sites/math.ronen/files/uploads/basri_-_paraperspective_affine.pdf
+1. G. R. Rodríguez Canosa, “Detección e identificación de objetos dinámicos en sistemas multi-robot,” M.S. thesis, Escuela Técnica Superior de Ingenieros Industriales, Universidad Politécnica de Madrid, Madrid, Spain, 2010. [Online]. Available: https://oa.upm.es/21899/1/GONZALO_RUY_RODRIGUEZ_CANOSA.pdf. Accessed: May 20, 2025.
+
+2. R. I. Hartley and A. Zisserman, _Multiple View Geometry in Computer Vision_, 2nd ed. Cambridge, U.K.: Cambridge University Press, 2004. [Online]. Available: https://www.r-5.org/files/books/computers/algo-list/image-processing/vision/Richard_Hartley_Andrew_Zisserman-Multiple_View_Geometry_in_Computer_Vision-EN.pdf. Accessed: May 20, 2025.
+
+3. Y. Wu, “Optical Flow and Motion Analysis,” EECS432‑Advanced Computer Vision Notes Series 6, Dept. of Electrical Engineering & Computer Science, Northwestern University, Evanston, IL, USA. [Online]. Available: http://users.ece.northwestern.edu/~yingwu/teaching/EECS432/Notes/optical_flow.pdf. Accessed: May 20, 2025.
+
+4. R. Basri, “Paraperspective ≡ Affine,” _International Journal of Computer Vision_, vol. 19, no. 2, pp. 169–180, 1996. [Online]. Available: https://www.weizmann.ac.il/math/ronen/sites/math.ronen/files/uploads/basri_-_paraperspective_affine.pdf. Accessed: May 20, 2025.
