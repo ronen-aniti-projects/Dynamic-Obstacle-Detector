@@ -1,0 +1,52 @@
+
+$$ \mathbf{X}_{C1} = Z_{C1} \mathbf{X}_{C1}' = Z_{C1} K^{-1} \mathbf{x}_1 $$
+
+
+$$ \mathbf{n}_{C1}^T (Z_{C1} K^{-1} \mathbf{x}_1) = d $$
+
+$$ Z_{C1} = \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} $$
+
+$$ \mathbf{X}_{C1} = \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 $$
+
+
+$$ \mathbf{X}_{C2} = \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} $$
+
+
+$$ \mathbf{x}_2 \sim K \left( \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} \right) $$
+
+$$ \mathbf{x}_2 \sim K \left( \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} \left( \frac{\mathbf{n}^T K^{-1} \mathbf{x}_1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} \right) \right) $$
+
+$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( d \mathbf{R} K^{-1} \mathbf{x}_1 + \mathbf{t} (\mathbf{n}^T K^{-1} \mathbf{x}_1) \right) $$
+
+$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( (d \mathbf{R}) K^{-1} \mathbf{x}_1 + (\mathbf{t}\mathbf{n}^T) K^{-1} \mathbf{x}_1 \right) $$
+
+$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( d \mathbf{R} + \mathbf{t}\mathbf{n}^T \right) K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( d \left( \mathbf{R} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) \right) K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( \mathbf{R} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim K \left( \mathbf{R} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
+
+
+$$ \mathbf{R} = \mathbf{R}_x(\theta_x) \mathbf{R}_y(\theta_y) \mathbf{R}_z(\theta_z) $$
+
+$$ \mathbf{R} = \begin{bmatrix} \cos \theta_y \cos \theta_z & -\cos \theta_y \sin \theta_z & \sin \theta_y \\ \cos \theta_x \sin \theta_z + \sin \theta_x \sin \theta_y \cos \theta_z & \cos \theta_x \cos \theta_z - \sin \theta_x \sin \theta_y \sin \theta_z & -\sin \theta_x \cos \theta_y \\ \sin \theta_x \sin \theta_z - \cos \theta_x \sin \theta_y \cos \theta_z & \sin \theta_x \cos \theta_z + \cos \theta_x \sin \theta_y \sin \theta_z & \cos \theta_x \cos \theta_y \end{bmatrix} $$
+
+$$ \mathbf{R} \approx \begin{bmatrix} 1 & -\theta_z & \theta_y \\ \theta_z & 1 & -\theta_x \\ -\theta_y & \theta_x & 1 \end{bmatrix} $$
+
+$$ \mathbf{R} \approx \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} $$
+
+$$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{1}{d} \begin{bmatrix} t_x n_x & t_x n_y & t_x n_z \\ t_y n_x & t_y n_y & t_y n_z \\ t_z n_x & t_z n_y & t_z n_z \end{bmatrix} \right) K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim K \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ \frac{t_z n_x}{d} & \frac{t_z n_y}{d} & 1 + \frac{t_z n_z}{d} \end{bmatrix} K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim K \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ 0 & 0 & 1 \end{bmatrix} K^{-1} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim \begin{bmatrix} f_x & s & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1/f_x & -s/(f_x f_y) & (s c_y - f_y c_x)/(f_x f_y) \\ 0 & 1/f_y & -c_y/f_y \\ 0 & 0 & 1 \end{bmatrix} \mathbf{x}_1 $$
+
+$$ \mathbf{x}_2 \sim \begin{bmatrix} A_1 & A_2 & A_3 \\ A_4 & A_5 & A_6 \\ 0 & 0 & 1 \end{bmatrix} \mathbf{x}_1 $$

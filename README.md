@@ -15,43 +15,34 @@ The mathematics that explain the premise involves deriving a homographic transfo
 * We begin by lifting all pixels belonging to the planar scene into the image plane via the camera intrinsics.
 
 <p align="center">
-  <img src="docs/eq1.svg" alt="Equation" width="125">
+  <img src="docs/eq1.svg" alt="Equation1" width="100">
 </p>
-aaav
 
 * The result is a ray indicating 3D direction in the reference frame of the camera before the motion step. We multiply this ray by the constant $ Z_{C1} $ to indicate a 3D image point. 
 
-$$ \mathbf{X}_{C1} = Z_{C1} \mathbf{X}_{C1}' = Z_{C1} K^{-1} \mathbf{x}_1 $$
+<p align="center">
+  <img src="docs/eq2.svg" alt="Equation2" width="190">
+</p>
+
 
 * Employing the fact that all points being transformed belong to the same plane, $ \mathbf{n}^T \mathbf{X}_{C1} = d $, we draw the following sequence to eliminate the $Z_{C1}$ ambiguity. 
 
-$$ \mathbf{n}_{C1}^T (Z_{C1} K^{-1} \mathbf{x}_1) = d $$
-
-$$ Z_{C1} = \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} $$
-
-$$ \mathbf{X}_{C1} = \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 $$
+<p align="center">
+  <img src="docs/eq3.svg" alt="Equation3" width="175">
+</p>
 
 * With the $Z_{C1}$ ambiguity eliminated, we proceed to model the effect of the camera's between-frame rigid body motion to express the mapping from the original pixel coordinates to post-motion coordinates in the new camera reference frame.  
 
-$$ \mathbf{X}_{C2} = \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} $$
+<p align="center">
+  <img src="docs/eq4.svg" alt="Equation4" width="200">
+</p>
 
 * We then introduce the structure for the homography by passing $ \mathbf{X}_{C2} $ through the camera intrinsics, then perform a sequence of algebriac simplifactions to draw out then remove unecessary constants and express a proper homography.
 
-$$ \mathbf{x}_2 \sim K \left( \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} \right) $$
+<p align="center">
+  <img src="docs/eq5.svg" alt="Equation5" width="400">
+</p>
 
-$$ \mathbf{x}_2 \sim K \left( \mathbf{R} \left( \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K^{-1} \mathbf{x}_1 \right) + \mathbf{t} \left( \frac{\mathbf{n}^T K^{-1} \mathbf{x}_1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} \right) \right) $$
-
-$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( d \mathbf{R} K^{-1} \mathbf{x}_1 + \mathbf{t} (\mathbf{n}^T K^{-1} \mathbf{x}_1) \right) $$
-
-$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( (d \mathbf{R}) K^{-1} \mathbf{x}_1 + (\mathbf{t}\mathbf{n}^T) K^{-1} \mathbf{x}_1 \right) $$
-
-$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( d \mathbf{R} + \mathbf{t}\mathbf{n}^T \right) K^{-1} \mathbf{x}_1 $$
-
-$$ \mathbf{x}_2 \sim \frac{1}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( d \left( \mathbf{R} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) \right) K^{-1} \mathbf{x}_1 $$
-
-$$ \mathbf{x}_2 \sim \frac{d}{\mathbf{n}^T K^{-1} \mathbf{x}_1} K \left( \mathbf{R} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
-
-$$ \mathbf{x}_2 \sim K \left( \mathbf{R} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
 
 * For the next step of the mathematical explanation of the premise, we recognize that the robot only has time to perform small rotations between successive image captures. This leads to a new expression for the homography, after expanding a general roll-pitch-yaw rotation matrix and deriving its first-order Taylor approximation. 
 
