@@ -37,21 +37,19 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq4.svg" alt="Equation4" width="210">
 </p>
 
-* We then introduce the structure for the homography by passing  <img src="docs/xc2.svg" alt="XC2" height="12"> through the camera intrinsics, then perform a sequence of algebriac simplifactions to draw out then remove unecessary constants and express a proper homography.
+* We then introduce the structure for the homographic mapping by projecting  <img src="docs/xc2.svg" alt="XC2" height="12"> through the camera intrinsic matrix, <img src="docs/K.svg" alt="K" height="11">, then performing a sequence of algebriac steps that factor out then remove constants shared among all terms of the similarity statement. 
 
 <p align="center">
   <img src="docs/eq5.svg" alt="Equation5" width="400">
 </p>
 
-
-* After expressing the homography in this way, we more closely examine our rotation matrix, which we will cast as a Z-Y-X rotation matrix. First, we write the rotation matrix out fully, showing all nine elements in their original trigonometric form. We proceed by linearizing our rotation matrix about the zero-roll, zero-pitch, zero-yaw operating point to conform to our small angle assumption. We finish by zeroing roll terms and pitch terms entirely to conform to our yaw-only assumption.    
-
+* With the homography rule expressed in terms of both the camera intrisic properties and the camera extrinsic properties, we proceed to detail the specific form of our rotation matrix and our translation vector. Starting with our rotation matrix, which we cast as a Z-Y-X rotation matrix, we have the following:
 
 <p align="center">
   <img src="docs/R.svg" alt="Rotation" width="400">
 </p>
 
-* We substitude our rotation matrix into our homography and expand and combine terms. We apply the notion that d will be assumed to be much larger than tz or that tz will be approximately zero. 
+* After writing the rotation matrix in this expanded form, we proceed to simplify while conforming to our core assumptions of yaw-only motion, first by replacing R with its first-order Taylor approximation at the zero-pitch, zero-roll, zero-yaw operating point in conformance with the small rotation assumption, then by zeroing roll and pitch completely in conformance with the yaw-only assumption.  
 
 $$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
 
