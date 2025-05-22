@@ -6,7 +6,7 @@ TODO: Explain how this project is the result of a two week assignment for a  cou
 ## The Basic Premise
 The approach is premised on the following: 
 * The mathematical technique of dense optical flow provides an estimation of pixel motion between robot camera images taken closely together in time. The technique takes as input two such frames and produces as output a field of R2 vectors showing pixel translational motion. The pixel motion is caused by relative motion between the robot camera and all of the objects in the robot’s scene. 
-* It has been shown in the literature that if we assume that this relative motion is caused only by the rotation and translation of the robot’s camera and that the robot’s camera scene is largely planar, then the optical flow field can be approximated by a single affine transformation (linear transformation plus translation) so long as we also assume that camera rotation between frames can only be nonzero about its yaw axis. 
+* It has been shown in the literature that if we assume that this relative motion is caused only by the rotation and translation of the robot’s camera and that the robot’s camera scene is largely planar, then the optical flow field can be approximated by a single affine transformation (linear transformation plus translation) so long as we also assume that camera rotation between frames can only be nonzero about its yaw axis and that $z$-axis camera translation is small. 
 * If we reproject all pixels from the first frame with the approximation affine transformation and compare their landing spots with the landing spots computed with a dense optical flow algorithm, then we reveal all segments of the image that deviate from our assumptions, providing a way of dynamic obstacle detection even when the robot itself is moving.
 
 ## The Mathematics that Underpin the Premise
@@ -48,15 +48,10 @@ The mathematics that explain the premise involves deriving a homographic transfo
 
 
 <p align="center">
-  <img src="docs/R.svg" alt="Rotation" width="325">
+  <img src="docs/R.svg" alt="Rotation" width="400">
 </p>
 
-
-
-* Furthremore, roll and pitch are assumed to be zero and the perpendicular distance to the plane is safely assumed to be much larger than the z-axis translation that occurs between successive image captures. 
-
-
-$$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
+* We substitude our rotation matrix into our homography and expand and combine terms. We apply the notion that d will be assumed to be much larger than tz or that tz will be approximately zero. 
 
 $$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
 
