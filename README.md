@@ -1,4 +1,4 @@
-# Demonstrating an Established Optical-Flow-Based Method for Mobile Robot Dynamic Obstacle Detection 
+# Differentiating Dynamic Obstacles from Robot Self-Motion with a Monocular Camera Image Dense Optical Flow and RANSAC-Fitted Affine Transformation Approach 
 
 ## Purpose
 TODO: Explain how this project is the result of a two week assignment for a  course on robot perception. 
@@ -44,7 +44,8 @@ The mathematics that explain the premise involves deriving a homographic transfo
 </p>
 
 
-* For the next step of the mathematical explanation of the premise, we recognize that the robot only has time to perform small rotations between successive image captures. This leads to a new expression for the homography, after expanding a general roll-pitch-yaw rotation matrix and deriving its first-order Taylor approximation. 
+* After expressing the homography in this way, we more closely examine our rotation matrix, which we will cast as a Z-Y-X rotation matrix. First, we write the rotation matrix out fully, showing all nine elements in their original trigonometric form. We proceed by linearizing our rotation matrix about the zero-roll, zero-pitch, zero-yaw operating point to conform to our small angle assumption. We finish by zeroing roll terms and pitch terms entirely to conform to our yaw-only assumption.    
+
 
 <p align="center">
   <img src="docs/R.svg" alt="Rotation" width="325">
@@ -84,6 +85,9 @@ The implementation involved the following:
 * Developing a detection mask based on the reprojection error between the estimated affine transformation and the apparent motion computed with dense optical flow.
 * Stopping the robot when the detection mask, smoothed temporally to maintain object constancy, fills beyond a static threshold. 
 
+## Accessing the Simulation
+This is facts on how to run the simulation and view the results.
+
 ## The Results and The Challenges
 We are realizing the following results and challenges:
 * In repeated trials in simulation tool Gazebo, we have realized accurate dynamic obstacle detection with no false positives. This is demonstrated by the ROS2 node flagging the robot’s approach to the moving obstacle soda can as being `unsafe` but not flagging any other scenes as being `unsafe`. 
@@ -114,3 +118,4 @@ We are realizing the following results and challenges:
 3. Y. Wu, “Optical Flow and Motion Analysis,” EECS432‑Advanced Computer Vision Notes Series 6, Dept. of Electrical Engineering & Computer Science, Northwestern University, Evanston, IL, USA. [Online]. Available: http://users.ece.northwestern.edu/~yingwu/teaching/EECS432/Notes/optical_flow.pdf. Accessed: May 20, 2025.
 
 4. R. Basri, “Paraperspective ≡ Affine,” _International Journal of Computer Vision_, vol. 19, no. 2, pp. 169–180, 1996. [Online]. Available: https://www.weizmann.ac.il/math/ronen/sites/math.ronen/files/uploads/basri_-_paraperspective_affine.pdf. Accessed: May 20, 2025.
+

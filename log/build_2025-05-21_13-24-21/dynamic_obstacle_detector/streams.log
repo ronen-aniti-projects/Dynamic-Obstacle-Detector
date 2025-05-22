@@ -1,0 +1,35 @@
+[1.279s] Invoking command in '/home/ronen/Optical_Flow_Node/src/dynamic_obstacle_detector': PYTHONPATH=/home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/prefix_override:/home/ronen/.local/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/dynamic_obstacle_detector build --build-base /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/build install --record /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/install.log --single-version-externally-managed install_data
+[1.408s] /home/ronen/.local/lib/python3.10/site-packages/setuptools/_distutils/dist.py:289: UserWarning: Unknown distribution option: 'tests_require'
+[1.408s]   warnings.warn(msg)
+[1.494s] running egg_info
+[1.507s] creating ../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info
+[1.508s] writing ../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/PKG-INFO
+[1.508s] writing dependency_links to ../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/dependency_links.txt
+[1.508s] writing entry points to ../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/entry_points.txt
+[1.509s] writing requirements to ../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/requires.txt
+[1.509s] writing top-level names to ../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/top_level.txt
+[1.509s] writing manifest file '../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/SOURCES.txt'
+[1.538s] reading manifest file '../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/SOURCES.txt'
+[1.539s] writing manifest file '../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info/SOURCES.txt'
+[1.539s] running build
+[1.539s] running build_py
+[1.539s] creating /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/build/lib/dynamic_obstacle_detector
+[1.540s] copying dynamic_obstacle_detector/__init__.py -> /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/build/lib/dynamic_obstacle_detector
+[1.540s] copying dynamic_obstacle_detector/main_node.py -> /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/build/lib/dynamic_obstacle_detector
+[1.540s] running install
+[1.544s] running install_lib
+[1.558s] creating /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages/dynamic_obstacle_detector
+[1.558s] copying /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/build/lib/dynamic_obstacle_detector/__init__.py -> /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages/dynamic_obstacle_detector
+[1.559s] copying /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/build/lib/dynamic_obstacle_detector/main_node.py -> /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages/dynamic_obstacle_detector
+[1.559s] byte-compiling /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages/dynamic_obstacle_detector/__init__.py to __init__.cpython-310.pyc
+[1.559s] byte-compiling /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages/dynamic_obstacle_detector/main_node.py to main_node.cpython-310.pyc
+[1.560s] running install_data
+[1.560s] creating /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/share/ament_index/resource_index/packages
+[1.560s] copying resource/dynamic_obstacle_detector -> /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/share/ament_index/resource_index/packages
+[1.560s] copying package.xml -> /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/share/dynamic_obstacle_detector
+[1.561s] running install_egg_info
+[1.576s] Copying ../../build/dynamic_obstacle_detector/dynamic_obstacle_detector.egg-info to /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages/dynamic_obstacle_detector-0.0.0-py3.10.egg-info
+[1.576s] running install_scripts
+[1.680s] Installing detection_node script to /home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/dynamic_obstacle_detector
+[1.680s] writing list of installed files to '/home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/install.log'
+[1.698s] Invoked command in '/home/ronen/Optical_Flow_Node/src/dynamic_obstacle_detector' returned '0': PYTHONPATH=/home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/prefix_override:/home/ronen/.local/lib/python3.10/site-packages/colcon_core/task/python/colcon_distutils_commands:/home/ronen/Optical_Flow_Node/install/dynamic_obstacle_detector/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/dynamic_obstacle_detector build --build-base /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/build install --record /home/ronen/Optical_Flow_Node/build/dynamic_obstacle_detector/install.log --single-version-externally-managed install_data
