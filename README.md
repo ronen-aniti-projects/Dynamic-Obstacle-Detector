@@ -1,10 +1,9 @@
 # Differentiating Dynamic Obstacles from Robot Self-Motion with a Monocular Camera Image Dense Optical Flow and RANSAC-Fitted Affine Transformation Approach 
 
-## Purpose
-TODO: Explain how this project is the result of a two week assignment for a  course on robot perception. * These assumptions make sense given the fact that a TurtleBot is a ground-based mobile differential drive robot that operates on smooth, flat surfaces and that has a front-facing camera fixed about each of the three principle rotational axes. 
+## Background
+In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model TurtleBot 4 in simulation environment Gazebo. The TurtleBot 4 is a ground-based differential drive mobile robot designed to operate on smooth, flat surfaces, having a fixed-pose front-facing camera-so the assumptions developed henceforth should be valid.
 
-TODO: Show why an affine does well to approximate a robot's own ego motion when the above conditions hold. 
-With our approach, we develop a new affine transformation computationally at each image processing step, then we assert that all pixels should move according to this affine rule, with pixels deviating from this rule being indicative of relative motion between the robot camera and the capture scene that is not explained by the robot's own motion so thus must be belonging to a dynamic obstacle.
+This work is an outgrowth of a two-week graduate course project for a course I am taking at the University of Maryland (College Park) titled "Perception for Autonomous Robots", taught by Dr. Tommy Chang and Dr. Samer Charifa.   
 
 ## The Basic Premise
 The approach is premised on the following: 
@@ -94,10 +93,10 @@ We are realizing the following results and challenges:
 ### Result Case 1. Robot stationary and dynamic obstacle present.
 ![Result1](docs/result2.png)
 
-### Result Case 2. Robot moving and dynamic obstacle present
+### Result Case 2. Robot moving and dynamic obstacle absent.
 ![Result2](docs/result1.png)
 
-### Result Case 3. Robot moving and dynamic obstacle present 
+### Result Case 3. Robot moving and dynamic obstacle present. 
 ![Result3](docs/result3.png)
 
 ## The Conclusion
