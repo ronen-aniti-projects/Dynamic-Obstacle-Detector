@@ -1,16 +1,19 @@
 # Differentiating Dynamic Obstacles from Robot Self-Motion with a Monocular Camera Image Dense Optical Flow and RANSAC-Fitted Affine Transformation Approach 
 
 ## Purpose
-TODO: Explain how this project is the result of a two week assignment for a  course on robot perception. 
+TODO: Explain how this project is the result of a two week assignment for a  course on robot perception. * These assumptions make sense given the fact that a TurtleBot is a ground-based mobile differential drive robot that operates on smooth, flat surfaces and that has a front-facing camera fixed about each of the three principle rotational axes. 
+
+TODO: Show why an affine does well to approximate a robot's own ego motion when the above conditions hold. 
+With our approach, we develop a new affine transformation computationally at each image processing step, then we assert that all pixels should move according to this affine rule, with pixels deviating from this rule being indicative of relative motion between the robot camera and the capture scene that is not explained by the robot's own motion so thus must be belonging to a dynamic obstacle.
 
 ## The Basic Premise
 The approach is premised on the following: 
 * The mathematical technique of dense optical flow provides an estimation of pixel motion between robot camera images taken closely together in time. The technique takes as input two such frames and produces as output a field of R2 vectors showing pixel translational motion. The pixel motion is caused by relative motion between the robot camera and all of the objects in the robot’s scene. 
-* It has been shown in the literature that if we assume that this relative motion is caused only by the rotation and translation of the robot’s camera and that the robot’s camera scene is largely planar, then the optical flow field can be approximated by a single affine transformation (linear transformation plus translation) so long as we also assume that camera rotation between frames can only be nonzero about its yaw axis and that $z$-axis camera translation is small. 
+* It has been shown in the literature that dense optical flow can be approximated by a 9-DOF homography but that this homography can be reduced to a 6-DOF affine under the assumptions that, between captured frames, the rotation of the robot is yaw-only and small and that the robot's vertical translation is negligible. 
 * If we reproject all pixels from the first frame with the approximation affine transformation and compare their landing spots with the landing spots computed with a dense optical flow algorithm, then we reveal all segments of the image that deviate from our assumptions, providing a way of dynamic obstacle detection even when the robot itself is moving.
 
 ## The Mathematics that Underpin the Premise
-The mathematics that explain the premise involves deriving a homographic transformation to describe how the pixel representation of a given planar scene changes between optical flow images taken closely together in time, then reducing this homographic transformation into an affine transformation leveraging that the robot camera moves between frames but that the camera rotation only involves yaw.
+The mathematics that explain the premise involves deriving a homographic transformation to describe how the pixel representation of a given planar scene changes between optical flow images taken closely together in time, then reducing this homographic transformation into an affine transformation leveraging that the robot camera moves between frames but that the camera rotation only involves yaw and leveraging that $z$-axis translation is small.
 
 * We begin by lifting all pixels belonging to the planar scene into the image plane via the camera intrinsics.
 
@@ -43,31 +46,28 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq5.svg" alt="Equation5" width="400">
 </p>
 
-* With the homography rule expressed in terms of both the camera intrisic properties and the camera extrinsic properties, we proceed to detail the specific form of our rotation matrix and our translation vector. Starting with our rotation matrix, which we cast as a Z-Y-X rotation matrix, we have the following:
+* Having expressed our homography in terms of camera intrinsics, parameters of the transformed plane, and the rotation and translation that occur between captured frames, we proceed to first examine $\mathbf{R}$ in its expanded form, then reduce it to a simpler form, conformant with our assumptions of how the TurtleBot moves. We employ a first-order linear approximation about the zero-roll, zero-pitch, zero-yaw operating point, then a direct zeroing of the roll and pitch terms.
 
 <p align="center">
   <img src="docs/R.svg" alt="Rotation" width="400">
 </p>
 
-* After writing the rotation matrix in this expanded form, we proceed to simplify while conforming to our core assumptions of yaw-only motion, first by replacing R with its first-order Taylor approximation at the zero-pitch, zero-roll, zero-yaw operating point in conformance with the small rotation assumption, then by zeroing roll and pitch completely in conformance with the yaw-only assumption.  
+<p align="center">
+  <img src="docs/R_Approx.svg" alt="Rotation Approx." width="200">
+</p>
 
-$$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{\mathbf{t}\mathbf{n}^T}{d} \right) K^{-1} \mathbf{x}_1 $$
+* We proceed by substituting our simplified $\mathbf{R}$ back into the homography, expanding the outer product $\mathbf{t}\mathbf{n}^T$, and combining like terms. The resulting form of the homography has plane parameters and extrinsic effects comprising a single matrix.  
 
-$$ \mathbf{x}_2 \sim K \left( \begin{bmatrix} 1 & -\theta_z & 0 \\ \theta_z & 1 & 0 \\ 0 & 0 & 1 \end{bmatrix} + \frac{1}{d} \begin{bmatrix} t_x n_x & t_x n_y & t_x n_z \\ t_y n_x & t_y n_y & t_y n_z \\ t_z n_x & t_z n_y & t_z n_z \end{bmatrix} \right) K^{-1} \mathbf{x}_1 $$
+<p align="center">
+  <img src="docs/eq6.svg" alt="Substitution" width="400">
+</p>
 
-$$ \mathbf{x}_2 \sim K \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ \frac{t_z n_x}{d} & \frac{t_z n_y}{d} & 1 + \frac{t_z n_z}{d} \end{bmatrix} K^{-1} \mathbf{x}_1 $$
+* Applying the assumption of negligible vertical translation $t_x$ between captured frames, we further simplify the center matrix to reveal an affine structure. Then, as a final step, we confirm that the resuling homography reduces to an affine transformation given the fact that $\mathbf{K}$ and $\mathbf{K}^{-1}$ are also affine.
 
-$$ \mathbf{x}_2 \sim K \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ 0 & 0 & 1 \end{bmatrix} K^{-1} \mathbf{x}_1 $$
+<p align="center">
+  <img src="docs/affine.svg" alt="Affine" width="600">
+</p>
 
-* We notice that when expanded, the form is still affine. 
-
-$$ \mathbf{x}_2 \sim \begin{bmatrix} f_x & s & c_x \\ 0 & f_y & c_y \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1 + \frac{t_x n_x}{d} & -\theta_z + \frac{t_x n_y}{d} & \frac{t_x n_z}{d} \\ \theta_z + \frac{t_y n_x}{d} & 1 + \frac{t_y n_y}{d} & \frac{t_y n_z}{d} \\ 0 & 0 & 1 \end{bmatrix} \begin{bmatrix} 1/f_x & -s/(f_x f_y) & (s c_y - f_y c_x)/(f_x f_y) \\ 0 & 1/f_y & -c_y/f_y \\ 0 & 0 & 1 \end{bmatrix} \mathbf{x}_1 $$
-
-$$ \mathbf{x}_2 \sim \begin{bmatrix} A_1 & A_2 & A_3 \\ A_4 & A_5 & A_6 \\ 0 & 0 & 1 \end{bmatrix} \mathbf{x}_1 $$
-
-With our approach, we develop a new affine transformation computationally at each image processing step, then we assert that all pixels should move according to this affine rule, with pixels deviating from this rule being indicative of relative motion between the robot camera and the capture scene that is not explained by the robot's own motion so thus must be belonging to a dynamic obstacle.
-
-TODO: Show why an affine does well to approximate a robot's own ego motion when the above conditions hold. 
 
 ## The Implementation
 The implementation involved the following:
@@ -112,3 +112,4 @@ We are realizing the following results and challenges:
 
 4. R. Basri, “Paraperspective ≡ Affine,” _International Journal of Computer Vision_, vol. 19, no. 2, pp. 169–180, 1996. [Online]. Available: https://www.weizmann.ac.il/math/ronen/sites/math.ronen/files/uploads/basri_-_paraperspective_affine.pdf. Accessed: May 20, 2025.
 
+6. C. Huang, P. Chen, X. Yang, and K.-T. Cheng, “REDBEE: A Visual‑Inertial Drone System for Real‑Time Moving Object Detection,” arXiv preprint arXiv:1712.09162, Dec. 2017. [Online]. Available: https://arxiv.org/pdf/1712.09162. Accessed: May 22, 2025.
