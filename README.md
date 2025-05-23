@@ -62,7 +62,7 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq6.svg" alt="Substitution" width="400">
 </p>
 
-* Applying the assumption of negligible vertical translation $t_x$ between captured frames, we further simplify the center matrix to reveal an affine structure. Then, as a final step, we confirm that the resuling homography reduces to an affine transformation given the fact that $\mathbf{K}$ and $\mathbf{K}^{-1}$ are also affine.
+* Applying the assumption of negligible vertical translation $t_z$ between captured frames, we further simplify the center matrix to reveal an affine structure. Then, as a final step, we confirm that the resuling homography reduces to an affine transformation given the fact that $\mathbf{K}$ and $\mathbf{K}^{-1}$ are also affine and the fact that the composition of three affine transformations is always itself an affine transformation.
 
 <p align="center">
   <img src="docs/affine.svg" alt="Affine" width="600">
@@ -112,4 +112,6 @@ We are realizing the following results and challenges:
 
 4. R. Basri, “Paraperspective ≡ Affine,” _International Journal of Computer Vision_, vol. 19, no. 2, pp. 169–180, 1996. [Online]. Available: https://www.weizmann.ac.il/math/ronen/sites/math.ronen/files/uploads/basri_-_paraperspective_affine.pdf. Accessed: May 20, 2025.
 
-6. C. Huang, P. Chen, X. Yang, and K.-T. Cheng, “REDBEE: A Visual‑Inertial Drone System for Real‑Time Moving Object Detection,” arXiv preprint arXiv:1712.09162, Dec. 2017. [Online]. Available: https://arxiv.org/pdf/1712.09162. Accessed: May 22, 2025.
+5. C. Huang, P. Chen, X. Yang, and K.-T. Cheng, “REDBEE: A Visual‑Inertial Drone System for Real‑Time Moving Object Detection,” arXiv preprint arXiv:1712.09162, Dec. 2017. [Online]. Available: https://arxiv.org/pdf/1712.09162. Accessed: May 22, 2025.
+
+6. B. Hu and J. Luo, “A Robust Semi‐Direct 3D SLAM for Mobile Robot Based on Dense Optical Flow in Dynamic Scenes,” Biomimetics, vol. 8, no. 4, art. 371, 2023. [Online]. Available: https://www.mdpi.com/2313-7673/8/4/371. Accessed: May 22, 2025.
