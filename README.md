@@ -1,12 +1,7 @@
-# Differentiating Dynamic Obstacles from Robot Self-Motion with a Monocular Camera Image Dense Optical Flow and RANSAC-Fitted Affine Transformation Approach 
+# Leveraging Dense Optical Flow and RANSAC-fitted Affine Homographies to Differentiate Robot Self-Motion from Dynamic Obstacle Motion in Monocular Camera Image Sequences
 
 ## Background
-In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. 
-
-
-Because the TurtleBot 4 is a ground-based differential drive mobile robot designed to operate on smooth, flat surfaces, having a fixed-pose front-facing camera-so the assumptions developed henceforth should be valid.
-
-This work is an outgrowth of a two-week graduate course project for a course I am taking at the University of Maryland (College Park) titled "Perception for Autonomous Robots", taught by Dr. Tommy Chang and Dr. Samer Charifa.
+In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. The mathematical assumptions developed henceforth are tied to the fact that the TurtleBot 3 operates on flat surfaces and has a fixed-pose, front-facing camera. 
 
 ## The Basic Premise
 The approach is premised on the following: 
@@ -80,9 +75,6 @@ The implementation involved the following:
 * Developing a detection mask based on the reprojection error between the estimated affine transformation and the apparent motion computed with dense optical flow.
 * Stopping the robot when the detection mask, smoothed temporally to maintain object constancy, fills beyond a static threshold. 
 
-## Accessing the Simulation
-This is facts on how to run the simulation and view the results. Dependencies. Launching the simulation. Teleoperation. Viewing the published facts.
-
 ## The Results and The Challenges
 We are realizing the following results and challenges:
 * In repeated trials in simulation tool Gazebo, we have realized accurate dynamic obstacle detection with no false positives. This is demonstrated by the ROS2 node flagging the robot’s approach to the moving obstacle soda can as being `unsafe` but not flagging any other scenes as being `unsafe`. 
@@ -104,6 +96,15 @@ We are realizing the following results and challenges:
 
 ## The Conclusion
 * In conclusion, we have validated a well-established conceptual framework for dynamic obstacle detection–one that centers on operating on the direct comparison between computed, apparent dense optical flow and a RANSAC-fitted affine transformation summarizing the “gist” of this dense flow field. That being said, while our results have been intriguing, a truly robust, practical rendition–immune to changes in scene and free from guess and check hard-coded parameter settings–would require additional time researching and understanding more of what’s already been achieved in the literature and in industry. 
+
+## Accessing the Simulation
+ROS2 Humble Desktop distribution. Gazebo version 11. TurtleBot3 packages for ROS2 Humble. Ubuntu 22.04 or Docker container. 
+Clone the repo.
+* Dependencies
+* Building
+* Launching
+* Teleoperation 
+* Viewing the Results
 
 ## References
 1. G. R. Rodríguez Canosa, “Detección e identificación de objetos dinámicos en sistemas multi-robot,” M.S. thesis, Escuela Técnica Superior de Ingenieros Industriales, Universidad Politécnica de Madrid, Madrid, Spain, 2010. [Online]. Available: https://oa.upm.es/21899/1/GONZALO_RUY_RODRIGUEZ_CANOSA.pdf. Accessed: May 20, 2025.
