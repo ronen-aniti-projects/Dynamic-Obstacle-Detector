@@ -1,0 +1,30 @@
+[0.188s] Invoking command in '/home/ronen/Documents/Optical-Flow-Node/ros2_ws/src/build/enpm673_final_proj': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(venv) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ VIRTUAL_ENV_PROMPT=(venv) /usr/bin/cmake /home/ronen/Documents/Optical-Flow-Node/ros2_ws/src/ENPM673_turtlebot_perception_challenge/enpm673_final_proj -DCMAKE_INSTALL_PREFIX=/home/ronen/Documents/Optical-Flow-Node/ros2_ws/src/install/enpm673_final_proj
+[0.200s] -- Found ament_cmake: 2.5.4 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.359s] -- Found rclcpp: 28.1.9 (/opt/ros/jazzy/share/rclcpp/cmake)
+[0.385s] -- Found rosidl_generator_c: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+[0.394s] -- Found rosidl_generator_cpp: 4.6.5 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+[0.406s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.419s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.480s] -- Found rmw_implementation_cmake: 7.3.2 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+[0.481s] -- Found rmw_fastrtps_cpp: 8.4.2 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+[0.542s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.605s] -- Found rclpy: 7.1.4 (/opt/ros/jazzy/share/rclpy/cmake)
+[0.616s] [31mCMake Error at CMakeLists.txt:13 (find_package):
+[0.616s]   By not providing "Findgazebo.cmake" in CMAKE_MODULE_PATH this project has
+[0.616s]   asked CMake to find a package configuration file provided by "gazebo", but
+[0.616s]   CMake did not find one.
+[0.616s] 
+[0.616s]   Could not find a package configuration file provided by "gazebo" with any
+[0.616s]   of the following names:
+[0.616s] 
+[0.616s]     gazeboConfig.cmake
+[0.616s]     gazebo-config.cmake
+[0.616s] 
+[0.617s]   Add the installation prefix of "gazebo" to CMAKE_PREFIX_PATH or set
+[0.617s]   "gazebo_DIR" to a directory containing one of the above files.  If "gazebo"
+[0.617s]   provides a separate development package or SDK, be sure it has been
+[0.617s]   installed.
+[0.617s] 
+[0.617s] [0m
+[0.617s] -- Configuring incomplete, errors occurred!
+[0.624s] Invoked command in '/home/ronen/Documents/Optical-Flow-Node/ros2_ws/src/build/enpm673_final_proj' returned '1': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector:/opt/ros/jazzy DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PS1=(venv) \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ VIRTUAL_ENV_PROMPT=(venv) /usr/bin/cmake /home/ronen/Documents/Optical-Flow-Node/ros2_ws/src/ENPM673_turtlebot_perception_challenge/enpm673_final_proj -DCMAKE_INSTALL_PREFIX=/home/ronen/Documents/Optical-Flow-Node/ros2_ws/src/install/enpm673_final_proj

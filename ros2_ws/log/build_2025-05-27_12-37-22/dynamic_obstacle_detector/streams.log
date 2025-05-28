@@ -1,0 +1,17 @@
+[0.486s] Invoking command in '/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector': PYTHONPATH=/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/build --no-deps symlink_data
+[0.687s] running develop
+[0.803s] running egg_info
+[0.803s] writing dynamic_obstacle_detector.egg-info/PKG-INFO
+[0.803s] writing dependency_links to dynamic_obstacle_detector.egg-info/dependency_links.txt
+[0.803s] writing entry points to dynamic_obstacle_detector.egg-info/entry_points.txt
+[0.804s] writing requirements to dynamic_obstacle_detector.egg-info/requires.txt
+[0.804s] writing top-level names to dynamic_obstacle_detector.egg-info/top_level.txt
+[0.805s] reading manifest file 'dynamic_obstacle_detector.egg-info/SOURCES.txt'
+[0.806s] writing manifest file 'dynamic_obstacle_detector.egg-info/SOURCES.txt'
+[0.807s] running build_ext
+[0.807s] Creating /home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/python3.10/site-packages/dynamic-obstacle-detector.egg-link (link to .)
+[0.807s] Installing detection_node script to /home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/dynamic_obstacle_detector
+[0.818s] 
+[0.818s] Installed /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector
+[0.818s] running symlink_data
+[0.828s] Invoked command in '/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector' returned '0': PYTHONPATH=/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/build --no-deps symlink_data

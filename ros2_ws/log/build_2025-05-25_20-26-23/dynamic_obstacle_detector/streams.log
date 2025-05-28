@@ -1,0 +1,19 @@
+[0.679s] Invoking command in '/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/build --no-deps symlink_data --force
+[0.957s] running develop
+[1.135s] running egg_info
+[1.152s] writing dynamic_obstacle_detector.egg-info/PKG-INFO
+[1.152s] writing dependency_links to dynamic_obstacle_detector.egg-info/dependency_links.txt
+[1.152s] writing entry points to dynamic_obstacle_detector.egg-info/entry_points.txt
+[1.152s] writing requirements to dynamic_obstacle_detector.egg-info/requires.txt
+[1.152s] writing top-level names to dynamic_obstacle_detector.egg-info/top_level.txt
+[1.187s] reading manifest file 'dynamic_obstacle_detector.egg-info/SOURCES.txt'
+[1.188s] writing manifest file 'dynamic_obstacle_detector.egg-info/SOURCES.txt'
+[1.206s] running build_ext
+[1.206s] Creating /home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/python3.12/site-packages/dynamic-obstacle-detector.egg-link (link to .)
+[1.207s] Installing detection_node script to /home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/dynamic_obstacle_detector
+[1.207s] 
+[1.207s] Installed /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector
+[1.207s] running symlink_data
+[1.207s] symbolically linking /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/resource/dynamic_obstacle_detector -> /home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/share/ament_index/resource_index/packages
+[1.207s] symbolically linking /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/package.xml -> /home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/share/dynamic_obstacle_detector
+[1.229s] Invoked command in '/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector' returned '0': DEBUGINFOD_URLS=https://debuginfod.ubuntu.com PYTHONPATH=/home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ronen/Documents/Optical-Flow-Node/ros2_ws/install/dynamic_obstacle_detector/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py develop --editable --build-directory /home/ronen/Documents/Optical-Flow-Node/ros2_ws/build/dynamic_obstacle_detector/build --no-deps symlink_data --force

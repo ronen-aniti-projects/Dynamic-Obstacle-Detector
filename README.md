@@ -1,9 +1,12 @@
 # Differentiating Dynamic Obstacles from Robot Self-Motion with a Monocular Camera Image Dense Optical Flow and RANSAC-Fitted Affine Transformation Approach 
 
 ## Background
-In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model TurtleBot 4 in simulation environment Gazebo. The TurtleBot 4 is a ground-based differential drive mobile robot designed to operate on smooth, flat surfaces, having a fixed-pose front-facing camera-so the assumptions developed henceforth should be valid.
+In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. 
 
-This work is an outgrowth of a two-week graduate course project for a course I am taking at the University of Maryland (College Park) titled "Perception for Autonomous Robots", taught by Dr. Tommy Chang and Dr. Samer Charifa.   
+
+Because the TurtleBot 4 is a ground-based differential drive mobile robot designed to operate on smooth, flat surfaces, having a fixed-pose front-facing camera-so the assumptions developed henceforth should be valid.
+
+This work is an outgrowth of a two-week graduate course project for a course I am taking at the University of Maryland (College Park) titled "Perception for Autonomous Robots", taught by Dr. Tommy Chang and Dr. Samer Charifa.
 
 ## The Basic Premise
 The approach is premised on the following: 
@@ -73,12 +76,12 @@ The implementation involved the following:
 
 * Standardizing frames obtained from the TurtleBot robot through a resizing operation to reduce computational complexity and a crop around an ROI operation to enforce the planar assumption. 
 * Computing the optical flow between successive frames using OpenCV’s Farneback Dense Optical Flow framework (`cv2.calcOpticalFlowFarneback()`) with the default recommended settings.
-* Developing an estimation affine 2x3 transformation matrix to model relative motion caused only by the robot’s own motion. This we accomplished with `cv2.estimateAffinePartial2D()` set with RANSAC.
+* Developing an estimation affine 2x3 transformation matrix to model relative motion caused only by the robot’s own motion. This we accomplished with `cv2.estimateAffine2D()` set with RANSAC.
 * Developing a detection mask based on the reprojection error between the estimated affine transformation and the apparent motion computed with dense optical flow.
 * Stopping the robot when the detection mask, smoothed temporally to maintain object constancy, fills beyond a static threshold. 
 
 ## Accessing the Simulation
-This is facts on how to run the simulation and view the results.
+This is facts on how to run the simulation and view the results. Dependencies. Launching the simulation. Teleoperation. Viewing the published facts.
 
 ## The Results and The Challenges
 We are realizing the following results and challenges:
@@ -114,3 +117,7 @@ We are realizing the following results and challenges:
 5. C. Huang, P. Chen, X. Yang, and K.-T. Cheng, “REDBEE: A Visual‑Inertial Drone System for Real‑Time Moving Object Detection,” arXiv preprint arXiv:1712.09162, Dec. 2017. [Online]. Available: https://arxiv.org/pdf/1712.09162. Accessed: May 22, 2025.
 
 6. B. Hu and J. Luo, “A Robust Semi‐Direct 3D SLAM for Mobile Robot Based on Dense Optical Flow in Dynamic Scenes,” Biomimetics, vol. 8, no. 4, art. 371, 2023. [Online]. Available: https://www.mdpi.com/2313-7673/8/4/371. Accessed: May 22, 2025.
+
+7. Ohnishi, Naoya & Imiya, Atsushi. (2006). Dominant plane detection from optical flow for robot navigation. Pattern Recognition Letters. 27. 1009-1021. 10.1016/j.patrec.2005.11.012. 
+
+8. Kushwaha, Arati & Khare, Ashish & Prakash, Om & Khare, Manish. (2020). Dense optical flow based background subtraction technique for object segmentation in moving camera environment. IET Image Processing. 14. 10.1049/iet-ipr.2019.0960. 
