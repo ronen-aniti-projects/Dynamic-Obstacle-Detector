@@ -99,6 +99,7 @@ We are realizing the following results and challenges:
 
 ## The Test-It-Yourself Instructions
 
+### Install the Required Software
 This provides a minimum set of instructions to get started. For additional details on the ROS2 Turtlebot node, including details on how to launch this project in a Docker container, please refer to Dr. Chang's repository. 
 
 Get the required software. 
@@ -109,7 +110,7 @@ sudo apt install ros-humble-desktop
 sudo apt install ros-humble-turtlebot3 ros-humble-turtlebot3-gazebo
 sudo apt install ros-humble-rqt-image-view ros-humble-teleop-twist-keyboard
 ```
-
+### Clone the Required Packages
 Clone the necessary ROS2 packages. 
 ```
 cd ~/ros2_ws/src
@@ -117,6 +118,7 @@ git clone https://github.com/TommyChangUMD/ENPM673_turtlebot_perception_challeng
 git clone https://github.com/ronen-aniti-projects/Optical-Flow-Node.git
 ```
 
+### Build and Source the Required Packages
 Build and source the packages. 
 ```
 cd ~/ros2_ws
@@ -126,6 +128,7 @@ colcon build --symlink-install --packages-select enpm673_final_proj dynamic_obst
 source install/setup.bash
 ```
 
+### Launch the ROS2 Nodes
 Launch the Gazebo world with Dr. Chang's ROS2 node. 
 ```
 ros2 run enpm673_final_proj enpm673_final_proj_main.py
@@ -137,12 +140,24 @@ Run the obstacle detection node.
 ros2 run dynamic_obstacle_detector detection_node
 ```
 
+### Teleoperate the Robot
 Teleoperate and view the image streams. 
+The algorithm as it is currently configured performs best on this setting:
+currently:	speed 0.10034060931179647	turn 0.10298119651312801 
+
 ```
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
+```
+
+
+### Review the Image Streams
+```
 ros2 run rqt_image_view rqt_image_view /camera/image_raw
 ros2 run rqt_image_view rqt_image_view /detection_mask
 ```
+Example as of May 30: 
+Enter a GIF of controlling the robot here:
+I have added ROI detection and consolidated all views into a single view pubished to this.  
 
 
 ## The References
