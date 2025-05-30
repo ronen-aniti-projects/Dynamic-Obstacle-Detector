@@ -97,16 +97,55 @@ We are realizing the following results and challenges:
 ## The Conclusion
 * In conclusion, we have validated a well-established conceptual framework for dynamic obstacle detection–one that centers on operating on the direct comparison between computed, apparent dense optical flow and a RANSAC-fitted affine transformation summarizing the “gist” of this dense flow field. That being said, while our results have been intriguing, a truly robust, practical rendition–immune to changes in scene and free from guess and check hard-coded parameter settings–would require additional time researching and understanding more of what’s already been achieved in the literature and in industry. 
 
-## Accessing the Simulation
-ROS2 Humble Desktop distribution. Gazebo version 11. TurtleBot3 packages for ROS2 Humble. Ubuntu 22.04 or Docker container. 
-Clone the repo.
-* Dependencies
-* Building
-* Launching
-* Teleoperation 
-* Viewing the Results
+## The Test-It-Yourself Instructions
 
-## References
+This provides a minimum set of instructions to get started. For additional details on the ROS2 Turtlebot node, including details on how to launch this project in a Docker container, please refer to Dr. Chang's repository. 
+
+Get the required software. 
+
+Ubuntu 22.04 LTS, ROS2 Humble and Gazebo, plus the TurtleBot 3 and RQt tools for teleoperation and image viewing. Install them by following these steps:
+```
+sudo apt install ros-humble-desktop
+sudo apt install ros-humble-turtlebot3 ros-humble-turtlebot3-gazebo
+sudo apt install ros-humble-rqt-image-view ros-humble-teleop-twist-keyboard
+```
+
+Clone the necessary ROS2 packages. 
+```
+cd ~/ros2_ws/src
+git clone https://github.com/TommyChangUMD/ENPM673_turtlebot_perception_challenge.git
+git clone https://github.com/ronen-aniti-projects/Optical-Flow-Node.git
+```
+
+Build and source the packages. 
+```
+cd ~/ros2_ws
+source /opt/ros/humble/setup.bash
+source  /usr/share/gazebo/setup.bash
+colcon build --symlink-install --packages-select enpm673_final_proj dynamic_obstacle_detector
+source install/setup.bash
+```
+
+Launch the Gazebo world with Dr. Chang's ROS2 node. 
+```
+ros2 run enpm673_final_proj enpm673_final_proj_main.py
+ros2 launch enpm673_final_proj enpm673_world.launch.py verbose:=true
+```
+
+Run the obstacle detection node. 
+```
+ros2 run dynamic_obstacle_detector detection_node
+```
+
+Teleoperate and view the image streams. 
+```
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 run rqt_image_view rqt_image_view /camera/image_raw
+ros2 run rqt_image_view rqt_image_view /detection_mask
+```
+
+
+## The References
 1. G. R. Rodríguez Canosa, “Detección e identificación de objetos dinámicos en sistemas multi-robot,” M.S. thesis, Escuela Técnica Superior de Ingenieros Industriales, Universidad Politécnica de Madrid, Madrid, Spain, 2010. [Online]. Available: https://oa.upm.es/21899/1/GONZALO_RUY_RODRIGUEZ_CANOSA.pdf. Accessed: May 20, 2025.
 
 2. R. I. Hartley and A. Zisserman, _Multiple View Geometry in Computer Vision_, 2nd ed. Cambridge, U.K.: Cambridge University Press, 2004. [Online]. Available: https://www.r-5.org/files/books/computers/algo-list/image-processing/vision/Richard_Hartley_Andrew_Zisserman-Multiple_View_Geometry_in_Computer_Vision-EN.pdf. Accessed: May 20, 2025.

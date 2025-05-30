@@ -27,6 +27,8 @@ class DetectionNode(Node):
             Image, '/mask_img', 10)
         self.pub_composite_display = self.create_publisher(
             Image, '/composite_display', 10) 
+        self.pub_detection_bool = self.create_publisher(
+            Bool, '/detection_bool', 1)
         
         # Dynamic obstacle detection state variables and settings
         self.detection = False
@@ -41,12 +43,13 @@ class DetectionNode(Node):
         self.smoothed_mask = None 
         self.residual_img = None 
         self.ROI_width_low, self.ROI_width_high = 0.0, 1.0
-        self.ROI_height_low, self.ROI_height_high = 0.65, 1.0
+        self.ROI_height_low, self.ROI_height_high = 0.5, 1.0
         self.standard_size = (250, 250)
-        self.mask_filter_alpha = 0.25
-        self.mask_filter_tau = 0.50
+        self.mask_filter_alpha = 0.8#0.25
+        self.mask_filter_tau = 0.9
         self.mag_cap = 10.0
-        self.ransac_thresh = 5.0#4.0#5.0#4.0
+        self.ransac_thresh = 2.0#5.0#4.0#5.0#4.0
+        self.gaussian_blur_size = (25, 25)
 
     def convert_gray(self, bgr):
         """
@@ -76,9 +79,10 @@ class DetectionNode(Node):
         """
         Return the pixel FLOW FIELD (apparent motion) between two frames.
         """
-        return cv2.calcOpticalFlowFarneback(
+        optical_flow = cv2.calcOpticalFlowFarneback(
             self.frame1, self.frame2, None,
             0.5, 5, 30, 5, 5, 1.2, 0)
+        return cv2.GaussianBlur(optical_flow, self.gaussian_blur_size, 0) 
 
     def flow_image(self):
         """
@@ -171,100 +175,113 @@ class DetectionNode(Node):
         """
         return self.flow_field - self.modeled_flow_field
 
-    
+    def evaluate_mask(self):
+        """
+        Returns True if the smoothed outlier mask has at or above the threshold fraction
+        of outliers, assumed to be explained by dynamic obstacle motion. Returns False
+        otherwise. 
+        """
+        return True 
+
     def main_cb(self, msg: Image):
         self.get_logger().info(f"Spinning")
 
-        # Convert the current image message to BGR
-        cv_frame = self.cv_bridge.imgmsg_to_cv2(msg, 'bgr8')
+        try:
+            # Convert the current image message to BGR
+            cv_frame = self.cv_bridge.imgmsg_to_cv2(msg, 'bgr8')
 
-        # Only proceed with calculations after aquiring two frames
-        if self.frame1 is None:
-            self.frame1 = self.standardize(cv_frame)
-            return 
-        self.frame2 = self.standardize(cv_frame)
 
-        # Compute the apparent motion between two most recent frames
-        self.flow_field = self.optical_flow()
+            # Only proceed with calculations after aquiring two frames
+            if self.frame1 is None:
+                self.frame1 = self.standardize(cv_frame)
+                return 
+            self.frame2 = self.standardize(cv_frame)
 
-        # Generate a BGR image of the flow field for visualization
-        self.flow_img = self.flow_image()
+            # Compute the apparent motion between two most recent frames
+            self.flow_field = self.optical_flow()
 
-        # Publish the flow field image:
-        self.pub_flow_img.publish(
-            self.cv_bridge.cv2_to_imgmsg(self.flow_img, encoding='bgr8'))
+            # Generate a BGR image of the flow field for visualization
+            self.flow_img = self.flow_image()
 
-        # Model the ego-motion of the robot camera with a RANSAC-fitted affine
-        self.affine, inliers = self.estimate_affine_ransac()
-        if self.affine is None:
+            # Publish the flow field image:
+            self.pub_flow_img.publish(
+                self.cv_bridge.cv2_to_imgmsg(self.flow_img, encoding='bgr8'))
+
+            # Model the ego-motion of the robot camera with a RANSAC-fitted affine
+            self.affine, inliers = self.estimate_affine_ransac()
+            if self.affine is None:
+                self.frame1 = self.frame2.copy()
+                return
+            self.mask = (inliers == 0) # mark outliers
+            self.modeled_flow_field = self.model_affine_flow()
+            
+            # Generate an estimated flow image
+            self.modeled_flow_img = self.est_flow_image()
+
+            # Publish the estimated flow field (ego-motion)
+            self.pub_est_flow_img.publish(
+                self.cv_bridge.cv2_to_imgmsg(self.modeled_flow_img, encoding='bgr8'))
+            
+            # Compute the residual flow field 
+            self.residual_flow_field = self.compute_residual()
+
+            # Generate a BGR image of the residual flow field for visualization
+            self.residual_img = self.residual_flow_image()
+            
+            # Publish the residual image
+            self.pub_res_img.publish(
+                self.cv_bridge.cv2_to_imgmsg(self.residual_img, encoding='bgr8'))
+
+            # Smooth the RANSAC outlier mask temporally
+            self.mask_smoothed = self.smooth_mask()
+
+            # Publish the smoothed outlier mask
+            self.pub_mask_img.publish(
+                self.cv_bridge.cv2_to_imgmsg(self.mask_smoothed, encoding='mono8'))
+
+
+            # Prepare base images for the composite display
+            display_raw_cam_unlabeled = cv2.resize(cv_frame, self.standard_size, interpolation=cv2.INTER_AREA)
+            mask_bgr_unlabeled = cv2.cvtColor(self.mask_smoothed, cv2.COLOR_GRAY2BGR)
+
+            # -- Text properties
+            font = cv2.FONT_HERSHEY_SIMPLEX
+            color = (255,255,255); 
+            line = 1
+            org_s = (5,15)
+            org_l = (5,20) 
+            fs_s = 0.4
+            fs_l = 0.5    
+
+            img_raw_labeled = display_raw_cam_unlabeled.copy()
+            cv2.putText(img_raw_labeled, 'Input Cam', org_l, font, fs_l, color, line)
+            
+            img_flow_labeled = self.flow_img.copy()
+            cv2.putText(img_flow_labeled, 'Optical Flow', org_s, font, fs_s, color, line)
+            
+            img_model_labeled = self.modeled_flow_img.copy()
+            cv2.putText(img_model_labeled, 'Ego-Motion', org_s, font, fs_s, color, line)
+            
+            img_resid_labeled = self.residual_img.copy()
+            cv2.putText(img_resid_labeled, 'Residual', org_s, font, fs_s, color, line)
+            
+            img_mask_labeled = mask_bgr_unlabeled.copy()
+            cv2.putText(img_mask_labeled, 'Mask', org_s, font, fs_s, color, line)
+            
+            bottom_panel_labeled = cv2.vconcat([img_flow_labeled, img_model_labeled, img_resid_labeled, img_mask_labeled])
+            composite_display_labeled = cv2.vconcat([img_raw_labeled, bottom_panel_labeled])
+            
+            self.pub_composite_display.publish(
+                self.cv_bridge.cv2_to_imgmsg(composite_display_labeled, encoding='bgr8'))
+
+            # Perform a frame update
             self.frame1 = self.frame2.copy()
+
+        except Exception as e:
+            self.get_logger().error(f"Error in main_cb: {e}. Skipping this frame.")
+            self.frame1, self.frame2 = None, None
             return
-        self.mask = (inliers == 0) # mark outliers
-        self.modeled_flow_field = self.model_affine_flow()
-        
-        # Generate an estimated flow image
-        self.modeled_flow_img = self.est_flow_image()
-
-        # Publish the estimated flow field (ego-motion)
-        self.pub_est_flow_img.publish(
-            self.cv_bridge.cv2_to_imgmsg(self.modeled_flow_img, encoding='bgr8'))
-         
-        # Compute the residual flow field 
-        self.residual_flow_field = self.compute_residual()
-
-        # Generate a BGR image of the residual flow field for visualization
-        self.residual_img = self.residual_flow_image()
-        
-        # Publish the residual image
-        self.pub_res_img.publish(
-            self.cv_bridge.cv2_to_imgmsg(self.residual_img, encoding='bgr8'))
-
-        # Smooth the RANSAC outlier mask temporally
-        self.mask_smoothed = self.smooth_mask()
-
-        # Publish the smoothed outlier mask
-        self.pub_mask_img.publish(
-            self.cv_bridge.cv2_to_imgmsg(self.mask_smoothed, encoding='mono8'))
-
-
-        # Prepare base images for the composite display
-        display_raw_cam_unlabeled = cv2.resize(cv_frame, self.standard_size, interpolation=cv2.INTER_AREA)
-        mask_bgr_unlabeled = cv2.cvtColor(self.mask_smoothed, cv2.COLOR_GRAY2BGR)
-
-        # Define text properties
-        font = cv2.FONT_HERSHEY_SIMPLEX
-        color = (255,255,255); 
-        line = 1
-        org_s = (5,15)
-        org_l = (5,20) 
-        fs_s = 0.4
-        fs_l = 0.5    
-
-        img_raw_labeled = display_raw_cam_unlabeled.copy()
-        cv2.putText(img_raw_labeled, 'Input Cam', org_l, font, fs_l, color, line)
-        
-        img_flow_labeled = self.flow_img.copy()
-        cv2.putText(img_flow_labeled, 'Optical Flow', org_s, font, fs_s, color, line)
-        
-        img_model_labeled = self.modeled_flow_img.copy()
-        cv2.putText(img_model_labeled, 'Ego-Motion', org_s, font, fs_s, color, line)
-        
-        img_resid_labeled = self.residual_img.copy()
-        cv2.putText(img_resid_labeled, 'Residual', org_s, font, fs_s, color, line)
-        
-        img_mask_labeled = mask_bgr_unlabeled.copy()
-        cv2.putText(img_mask_labeled, 'Mask', org_s, font, fs_s, color, line)
-        
-        bottom_panel_labeled = cv2.vconcat([img_flow_labeled, img_model_labeled, img_resid_labeled, img_mask_labeled])
-        composite_display_labeled = cv2.vconcat([img_raw_labeled, bottom_panel_labeled])
-        
-        self.pub_composite_display.publish(
-            self.cv_bridge.cv2_to_imgmsg(composite_display_labeled, encoding='bgr8'))
-        
-
-
-        self.frame1 = self.frame2.copy()
-        
+            
         
 
     
