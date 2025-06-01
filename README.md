@@ -1,7 +1,7 @@
 # Leveraging Dense Optical Flow and RANSAC-fitted Affine Homographies to Differentiate Robot Self-Motion from Dynamic Obstacle Motion in Monocular Camera Image Sequences
 
 ## Background
-In this project. I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. The mathematical assumptions developed henceforth are tied to the fact that the TurtleBot 3 operates on flat surfaces and has a fixed-pose, front-facing camera. 
+In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. The mathematical assumptions developed henceforth are tied to the fact that the TurtleBot 3 operates on flat surfaces and has a fixed-pose, front-facing camera. 
 
 This project represents my independent contributions to a two-week final course group project for a course titled *Perception for Autonomous Robotics* (ENPM673). The course is a requirement for my University of Maryland (College Park) M.Eng. Robotics Engineering major.
 
@@ -12,7 +12,7 @@ The approach is premised on the following:
 * If we reproject all pixels from the first frame with the approximation affine transformation and compare their landing spots with the landing spots computed with a dense optical flow algorithm, then we reveal all segments of the image that deviate from our assumptions, providing a way of dynamic obstacle detection even when the robot itself is moving.
 
 ## The Mathematics that Underpin the Premise
-The mathematics that explain the premise involves deriving a homographic transformation to describe how the pixel representation of a given planar scene changes between optical flow images taken closely together in time, then reducing this homographic transformation into an affine transformation leveraging that the robot camera moves between frames but that the camera rotation only involves yaw and that $z$-axis translation is small.
+The mathematics that explain the premise involves deriving a homographic transformation to describe how the pixel representation of a given planar scene changes between optical flow images taken closely together in time, then reducing this homographic transformation into an affine transformation leveraging that the robot camera moves between frames but that the camera rotation only involves yaw and that <img src="docs/z_alone.svg" alt="z-" height="10">-axis translation is small.
 
 * We begin by lifting all pixels belonging to the planar scene into the image plane via the camera intrinsics.
 
@@ -45,7 +45,7 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq5.svg" alt="Equation5" width="400">
 </p>
 
-* Having expressed our homography in terms of camera intrinsics, parameters of the transformed plane, and the rotation and translation that occur between captured frames, we proceed to first examine $\mathbf{R}$ in its expanded form, then reduce it to a simpler form, conformant with our assumptions of how the TurtleBot moves. We employ a first-order linear approximation about the zero-roll, zero-pitch, zero-yaw operating point, then a direct zeroing of the roll and pitch terms.
+* Having expressed our homography in terms of camera intrinsics, parameters of the transformed plane, and the rotation and translation that occur between captured frames, we proceed to first examine <img src="docs/R_alone.svg" alt="R symbol" height="12"> in its expanded form, then reduce it to a simpler form, conformant with our assumptions of how the TurtleBot moves. We employ a first-order linear approximation about the zero-roll, zero-pitch, zero-yaw operating point, then a direct zeroing of the roll and pitch terms.
 
 <p align="center">
   <img src="docs/R.svg" alt="Rotation" width="400">
@@ -55,13 +55,13 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/R_Approx.svg" alt="Rotation Approx." width="200">
 </p>
 
-* We proceed by substituting our simplified $\mathbf{R}$ back into the homography, expanding the outer product $\mathbf{t}\mathbf{n}^T$, and combining like terms. The resulting form of the homography has plane parameters and extrinsic effects comprising a single matrix.  
+* We proceed by substituting our simplified <img src="docs/R_alone.svg" alt="R symbol" height="12"> back into the homography, expanding the outer product <img src="docs/outer_product_symb.svg" alt="Outer product" height="14">, and combining like terms. The resulting form of the homography has plane parameters and extrinsic effects comprising a single matrix.  
 
 <p align="center">
   <img src="docs/eq6.svg" alt="Substitution" width="400">
 </p>
 
-* Applying the assumption of negligible vertical translation $t_z$ between captured frames, we further simplify the center matrix to reveal an affine structure. Then, as a final step, we confirm that the resulting homography reduces to an affine transformation given the fact that $\mathbf{K}$ and $\mathbf{K}^{-1}$ are also affine and the fact that the composition of three affine transformations is always itself an affine transformation.
+* Applying the assumption of negligible vertical translation <img src="docs/tz.svg" alt="tz" height="14"> between captured frames, we further simplify the center matrix to reveal an affine structure. Then, as a final step, we confirm that the resulting homography reduces to an affine transformation given the fact that  <img src="docs/K.svg" alt="K" height="12"> and <img src="docs/Kinv.svg" alt="Kinv" height="15"> are also affine and the fact that the composition of three affine transformations is always itself an affine transformation.
 
 <p align="center">
   <img src="docs/affine.svg" alt="Affine" width="600">
