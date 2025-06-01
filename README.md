@@ -97,7 +97,7 @@ We are realizing the following results and challenges:
 ![Result3](docs/result3.png)
 
 ## The Conclusion
-* In conclusion, we have validated a well-established conceptual framework for dynamic obstacle detection–one that centers on operating on the direct comparison between computed, apparent dense optical flow and a RANSAC-fitted affine transformation summarizing the “gist” of this dense flow field. That being said, while our results have been intriguing, a truly robust, practical rendition–immune to changes in scene and free from guess and check hard-coded parameter settings–would require additional time researching and understanding more of what’s already been achieved in the literature and in industry. 
+* In conclusion, we have validated a well-established conceptual framework for dynamic obstacle detection—one that centers on operating on the direct comparison between computed, apparent dense optical flow and a RANSAC-fitted affine transformation summarizing the “gist” of this dense flow field. That being said, while our results have been intriguing, a truly robust, practical rendition—immune to changes in scene and free from guess and check hard-coded parameter settings—would require additional time researching and understanding more of what’s already been achieved in the literature and in industry. 
 
 ## The Test-It-Yourself Instructions
 
@@ -172,7 +172,7 @@ ros2 run rqt_image_view rqt_image_view
 ```
 
 ## Follow-Up: May 31, 2025: Recorded Demonstration: TurtleBot Approaching a Dynamic Obstacle
-On May 31, 2025, I published an update for the dynamic obstacle detection node that consolidates, into a single view, the various image processing steps, these being dense optical flow, ego-motion via RANSAC affine, residual image, and RANSAC inlier mask. Because I believe it will aid in understanding of the underlying dynamic obstacle detection detection logic, I have published a screen recording showing the output of this composite image during a dynamic obstacle approach maneuver--the simulation TurtleBot approaching a moving soda can.  
+On May 31, 2025, I published an update for the dynamic obstacle detection node that consolidates, into a single view, the various image processing steps, these being dense optical flow, ego-motion via RANSAC affine, residual image, and RANSAC inlier mask. Because I believe it will aid in understanding of the underlying dynamic obstacle detection detection logic, I have published a screen recording showing the output of this composite image during a dynamic obstacle approach maneuver—the simulation TurtleBot approaching a moving soda can.  
 
 ### Demonstration: TurtleBot Approaching a Dynamic Obstacle
 ![Demo](docs/demo.gif)
