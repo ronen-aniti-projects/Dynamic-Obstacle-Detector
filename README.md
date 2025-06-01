@@ -1,7 +1,9 @@
 # Leveraging Dense Optical Flow and RANSAC-fitted Affine Homographies to Differentiate Robot Self-Motion from Dynamic Obstacle Motion in Monocular Camera Image Sequences
 
 ## Background
-In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. The mathematical assumptions developed henceforth are tied to the fact that the TurtleBot 3 operates on flat surfaces and has a fixed-pose, front-facing camera. 
+In this project. I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. The mathematical assumptions developed henceforth are tied to the fact that the TurtleBot 3 operates on flat surfaces and has a fixed-pose, front-facing camera. 
+
+This project represents my independent contributions to a two-week final course group project for a course titled *Perception for Autonomous Robotics* (ENPM673). The course is a requirement for my University of Maryland (College Park) M.Eng. Robotics Engineering major.
 
 ## The Basic Premise
 The approach is premised on the following: 
@@ -10,7 +12,7 @@ The approach is premised on the following:
 * If we reproject all pixels from the first frame with the approximation affine transformation and compare their landing spots with the landing spots computed with a dense optical flow algorithm, then we reveal all segments of the image that deviate from our assumptions, providing a way of dynamic obstacle detection even when the robot itself is moving.
 
 ## The Mathematics that Underpin the Premise
-The mathematics that explain the premise involves deriving a homographic transformation to describe how the pixel representation of a given planar scene changes between optical flow images taken closely together in time, then reducing this homographic transformation into an affine transformation leveraging that the robot camera moves between frames but that the camera rotation only involves yaw and leveraging that $z$-axis translation is small.
+The mathematics that explain the premise involves deriving a homographic transformation to describe how the pixel representation of a given planar scene changes between optical flow images taken closely together in time, then reducing this homographic transformation into an affine transformation leveraging that the robot camera moves between frames but that the camera rotation only involves yaw and that $z$-axis translation is small.
 
 * We begin by lifting all pixels belonging to the planar scene into the image plane via the camera intrinsics.
 
@@ -77,7 +79,7 @@ The implementation involved the following:
 
 ## The Results and The Challenges
 We are realizing the following results and challenges:
-* In repeated trials in simulation tool Gazebo, we have realized accurate dynamic obstacle detection with no false positives. This is demonstrated by the ROS2 node flagging the robot’s approach to the moving obstacle soda can as being `unsafe` but not flagging any other scenes as being `unsafe`. 
+* In repeated trials in simulation tool Gazebo, we have realized accurate dynamic obstacle detection with no false positives. This is demonstrated by the ROS 2 node flagging the robot’s approach to the moving obstacle soda can as being `unsafe` but not flagging any other scenes as being `unsafe`. 
 * The fact that our implementation relies on static thresholding for the RANSAC affine fitting step and for the final decision maker step means results will always be scene dependent and will always require parameter tuning. 
     * For example, we have found that the increasing the RANSAC inlier threshold reduces false positives at the sacrifice of not always detecting true dynamic obstacle motion. 
     * Moreover, we have realized that lowering the threshold requirement for mask inliers increases the frequency of false detections.
@@ -99,66 +101,81 @@ We are realizing the following results and challenges:
 
 ## The Test-It-Yourself Instructions
 
-### Install the Required Software
-This provides a minimum set of instructions to get started. For additional details on the ROS2 Turtlebot node, including details on how to launch this project in a Docker container, please refer to Dr. Chang's repository. 
+### Ensure Dependencies are Met
+This project requires Ubuntu 22.04, ROS 2 Humble, Python 3, as well as the following packages, available via `apt`:
 
-Get the required software. 
+```
+ros-humble-desktop
+ros-humble-gazebo*           
+ros-humble-turtlebot3 
+ros-humble-turtlebot3-gazebo  
+ros-humble-rqt-image-view  
+ros-humble-teleop-twist-keyboard  
+ros-humble-cv-bridge  
+ros-humble-image-transport  
+python3-opencv python3-numpy 
+python3-colcon-common-extensions  
+```
 
-Ubuntu 22.04 LTS, ROS2 Humble and Gazebo, plus the TurtleBot 3 and RQt tools for teleoperation and image viewing. Install them by following these steps:
+### Obtain and Build the Necessary ROS 2 Repositories
+The code I've developed in this repository, meant for dynamic obstacle detection, is a ROS 2 node designed to work together with the simulation developed by my instructor for this course, Dr. Tommy Chang. To get started, clone this repository, navigate to its `ros2_ws/src` subdirectory, the clone Dr. Chang's simulation. 
 ```
-sudo apt install ros-humble-desktop
-sudo apt install ros-humble-turtlebot3 ros-humble-turtlebot3-gazebo
-sudo apt install ros-humble-rqt-image-view ros-humble-teleop-twist-keyboard
-```
-### Clone the Required Packages
-Clone the necessary ROS2 packages. 
-```
-cd ~/ros2_ws/src
-git clone https://github.com/TommyChangUMD/ENPM673_turtlebot_perception_challenge.git
 git clone https://github.com/ronen-aniti-projects/Optical-Flow-Node.git
+cd Optical-Flow-Node/ros2_ws
+cd src
+git clone https://github.com/TommyChangUMD/ENPM673_turtlebot_perception_challenge.git
 ```
 
-### Build and Source the Required Packages
-Build and source the packages. 
+With Dr. Chang's simulation repository cloned, navigate to the parent subdirectory (the ROS 2 workspace), then build both packages at once with `colcon`. 
 ```
-cd ~/ros2_ws
+colcon build --symlink-install
+```
+
+### Launch the Demonstration
+
+#### Terminal 1: Launch The Gazebo Simulation
+```
 source /opt/ros/humble/setup.bash
-source  /usr/share/gazebo/setup.bash
-colcon build --symlink-install --packages-select enpm673_final_proj dynamic_obstacle_detector
-source install/setup.bash
-```
-
-### Launch the ROS2 Nodes
-Launch the Gazebo world with Dr. Chang's ROS2 node. 
-```
-ros2 run enpm673_final_proj enpm673_final_proj_main.py
+source /usr/share/gazebo/setup.bash
+source ~/turtlebot_perception_challenge/install/setup.bash
+source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
 ros2 launch enpm673_final_proj enpm673_world.launch.py verbose:=true
 ```
 
-Run the obstacle detection node. 
+#### Terminal 2: Run the Obstacle Detection ROS 2 Node
 ```
+source /opt/ros/humble/setup.bash
+source /usr/share/gazebo/setup.bash
+source ~/turtlebot_perception_challenge/install/setup.bash
+source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
 ros2 run dynamic_obstacle_detector detection_node
 ```
 
-### Teleoperate the Robot
-Teleoperate and view the image streams. 
-The algorithm as it is currently configured performs best on this setting:
-currently:	speed 0.10034060931179647	turn 0.10298119651312801 
-
+#### Terminal 3: Run and Configure the ROS2 Teleoperation Node
 ```
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
+source /opt/ros/humble/setup.bash
+source /usr/share/gazebo/setup.bash
+source ~/turtlebot_perception_challenge/install/setup.bash
+source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
+ros2 run teleop_twist_keyboard teleop_twist_keyboard \
+  --ros-args -r /cmd_vel:=/input_cmd_vel
+```
+Importantly, in order to achieve accurate dynamic obstacle detections with the default detector configuration, set, using the `q/z/e/c` keyboard keys, the maximum linear velocity to `0.1 m/s` or lower and the maximum angular velocity to `0.1 rad/s` or lower. 
+
+#### Terminal 4: Run the ROS2 RQt Image Viewer Node
+```
+source /opt/ros/humble/setup.bash
+source /usr/share/gazebo/setup.bash
+source ~/turtlebot_perception_challenge/install/setup.bash
+source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
+ros2 run rqt_image_view rqt_image_view 
 ```
 
+## Follow-Up: May 31, 2025: Recorded Demonstration: TurtleBot Approaching a Dynamic Obstacle
+On May 31, 2025, I published an update for the obstacle detection Node that consolidates, into a single view, the various image processing steps, these being dense optical flow, ego-motion via RANSAC affine, residual image, and RANSAC inlier mask. 
 
-### Review the Image Streams
-```
-ros2 run rqt_image_view rqt_image_view /camera/image_raw
-ros2 run rqt_image_view rqt_image_view /detection_mask
-```
-Example as of May 30: 
-Enter a GIF of controlling the robot here:
-I have added ROI detection and consolidated all views into a single view pubished to this.  
-
+### Demonstration: TurtleBot Approaching a Dynamic Obstacle
+![Demo](docs/demo.gif)
 
 ## The References
 1. G. R. Rodríguez Canosa, “Detección e identificación de objetos dinámicos en sistemas multi-robot,” M.S. thesis, Escuela Técnica Superior de Ingenieros Industriales, Universidad Politécnica de Madrid, Madrid, Spain, 2010. [Online]. Available: https://oa.upm.es/21899/1/GONZALO_RUY_RODRIGUEZ_CANOSA.pdf. Accessed: May 20, 2025.
@@ -173,6 +190,6 @@ I have added ROI detection and consolidated all views into a single view pubishe
 
 6. B. Hu and J. Luo, “A Robust Semi‐Direct 3D SLAM for Mobile Robot Based on Dense Optical Flow in Dynamic Scenes,” Biomimetics, vol. 8, no. 4, art. 371, 2023. [Online]. Available: https://www.mdpi.com/2313-7673/8/4/371. Accessed: May 22, 2025.
 
-7. Ohnishi, Naoya & Imiya, Atsushi. (2006). Dominant plane detection from optical flow for robot navigation. Pattern Recognition Letters. 27. 1009-1021. 10.1016/j.patrec.2005.11.012. 
+7. Ohnishi, Naoya & Imiya, Atsushi. (2006). Dominant plane detection from optical flow for robot navigation. Pattern Recognition Letters. 27. 1009-1021. 10.1016/j.patrec.2005.11.012. [Online]. Available: https://www.sciencedirect.com/science/article/abs/pii/S0167865505003703. Accessed: May 31, 2025.
 
-8. Kushwaha, Arati & Khare, Ashish & Prakash, Om & Khare, Manish. (2020). Dense optical flow based background subtraction technique for object segmentation in moving camera environment. IET Image Processing. 14. 10.1049/iet-ipr.2019.0960. 
+8. Kushwaha, Arati & Khare, Ashish & Prakash, Om & Khare, Manish. (2020). Dense optical flow based background subtraction technique for object segmentation in moving camera environment. IET Image Processing. 14. 10.1049/iet-ipr.2019.0960. [Online]. Available: https://www.researchgate.net/publication/345240488_Dense_optical_flow_based_background_subtraction_technique_for_object_segmentation_in_moving_camera_environment. Accessed: May 31, 2025.

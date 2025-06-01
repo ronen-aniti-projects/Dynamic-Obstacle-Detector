@@ -4,7 +4,8 @@ from rclpy.node import Node
 from cv_bridge import CvBridge 
 from sensor_msgs.msg import Image
 import cv2 
-from std_msgs.msg import Bool 
+from std_msgs.msg import Bool
+from geometry_msgs.msg import Twist 
 import numpy as np 
 
 class DetectionNode(Node):
@@ -15,6 +16,8 @@ class DetectionNode(Node):
         self.cv_bridge = CvBridge() 
         self.sub_img = self.create_subscription(
             Image, "/camera/image_raw", self.main_cb, 10)
+        self.sub_teleop = self.create_subscription(
+            Twist, '/input_cmd_vel', self.teleop_cb, 10)
         self.pub_detection = self.create_publisher(
             Bool, "/detection", 1)
         self.pub_flow_img = self.create_publisher(
@@ -28,7 +31,9 @@ class DetectionNode(Node):
         self.pub_composite_display = self.create_publisher(
             Image, '/composite_display', 10) 
         self.pub_detection_bool = self.create_publisher(
-            Bool, '/detection_bool', 1)
+            Bool, '/detection_bool', 10)
+        self.pub_cmd_vel = self.create_publisher(
+            Twist, '/cmd_vel', 10)
         
         # Dynamic obstacle detection state variables and settings
         self.detection = False
@@ -47,9 +52,10 @@ class DetectionNode(Node):
         self.standard_size = (250, 250)
         self.mask_filter_alpha = 0.8#0.25
         self.mask_filter_tau = 0.9
-        self.mag_cap = 10.0
+        self.mag_cap = 5.0
         self.ransac_thresh = 2.0#5.0#4.0#5.0#4.0
         self.gaussian_blur_size = (25, 25)
+        self.outlier_percent_thresh = 5.0
 
     def convert_gray(self, bgr):
         """
@@ -136,16 +142,6 @@ class DetectionNode(Node):
         #affine, inliers = cv2.estimateAffinePartial2D(
         #    pre_image, image, method=cv2.RANSAC, ransacReprojThreshold=self.ransac_thresh)
         return affine, inliers.reshape(H, W)
-    
-    def obstacle_decision_maker(self, inliers, percent_thresh=1.0):
-        """
-        Returns BOOLEAN decision as the whether the scene is UNSAFE
-        """
-        mask = (inliers == 0)
-        mask_smoothed = self.smooth_mask(mask)
-        percent = 100 * mask_smoothed.mean() 
-        self.get_logger().info(f"Percent smoothed: {percent: .2f}")
-        return percent > percent_thresh
 
     def smooth_mask(self):
         """
@@ -181,15 +177,29 @@ class DetectionNode(Node):
         of outliers, assumed to be explained by dynamic obstacle motion. Returns False
         otherwise. 
         """
-        return True 
+        percent = 100 * (self.mask_smoothed / 255).mean()
+        self.get_logger().info(f"Percent smoothed mask (outliers): {percent: .2f}%")
+        return percent > self.outlier_percent_thresh
+    
+    def teleop_cb(self, msg: Twist):
+        """
+        Gates the teleop Twist message by the current detection flag. When a dynamic obstacle
+        is detected, this callback will command zero velocity on topic /cmd_vel.
+        """
+        x = msg.linear.x 
+        w = msg.angular.z 
+        if self.detection: 
+            out = Twist() 
+            self.get_logger().warn("Overriding teleop because of detection")
+        else: 
+            out = msg 
+        self.pub_cmd_vel.publish(out)
 
     def main_cb(self, msg: Image):
-        self.get_logger().info(f"Spinning")
-
+        
         try:
             # Convert the current image message to BGR
             cv_frame = self.cv_bridge.imgmsg_to_cv2(msg, 'bgr8')
-
 
             # Only proceed with calculations after aquiring two frames
             if self.frame1 is None:
@@ -238,13 +248,18 @@ class DetectionNode(Node):
             # Publish the smoothed outlier mask
             self.pub_mask_img.publish(
                 self.cv_bridge.cv2_to_imgmsg(self.mask_smoothed, encoding='mono8'))
-
+            
+            # Determine if the scene is safe
+            self.detection = self.evaluate_mask()
+            detection_msg = Bool()
+            detection_msg.data = bool(self.detection) 
+            self.pub_detection_bool.publish(detection_msg)
 
             # Prepare base images for the composite display
             display_raw_cam_unlabeled = cv2.resize(cv_frame, self.standard_size, interpolation=cv2.INTER_AREA)
             mask_bgr_unlabeled = cv2.cvtColor(self.mask_smoothed, cv2.COLOR_GRAY2BGR)
 
-            # -- Text properties
+            # Text properties
             font = cv2.FONT_HERSHEY_SIMPLEX
             color = (255,255,255); 
             line = 1
@@ -255,7 +270,11 @@ class DetectionNode(Node):
 
             img_raw_labeled = display_raw_cam_unlabeled.copy()
             cv2.putText(img_raw_labeled, 'Input Cam', org_l, font, fs_l, color, line)
+            if self.detection:
+                cv2.putText(img_raw_labeled, 'DYNAMIC OBSTACLE!', (int(0.1*img_raw_labeled.shape[1]), int(0.9*img_raw_labeled.shape[0])), 
+                            font, 0.7, (0, 0, 255), 2, cv2.LINE_AA)
             
+
             img_flow_labeled = self.flow_img.copy()
             cv2.putText(img_flow_labeled, 'Optical Flow', org_s, font, fs_s, color, line)
             
@@ -266,7 +285,7 @@ class DetectionNode(Node):
             cv2.putText(img_resid_labeled, 'Residual', org_s, font, fs_s, color, line)
             
             img_mask_labeled = mask_bgr_unlabeled.copy()
-            cv2.putText(img_mask_labeled, 'Mask', org_s, font, fs_s, color, line)
+            cv2.putText(img_mask_labeled, 'RANSAC Outliers', org_s, font, fs_s, color, line)
             
             bottom_panel_labeled = cv2.vconcat([img_flow_labeled, img_model_labeled, img_resid_labeled, img_mask_labeled])
             composite_display_labeled = cv2.vconcat([img_raw_labeled, bottom_panel_labeled])
