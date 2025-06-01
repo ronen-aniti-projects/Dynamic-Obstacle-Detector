@@ -172,7 +172,7 @@ ros2 run rqt_image_view rqt_image_view
 ```
 
 ## Follow-Up: May 31, 2025: Recorded Demonstration: TurtleBot Approaching a Dynamic Obstacle
-On May 31, 2025, I published an update for the obstacle detection Node that consolidates, into a single view, the various image processing steps, these being dense optical flow, ego-motion via RANSAC affine, residual image, and RANSAC inlier mask. 
+On May 31, 2025, I published an update for the dynamic obstacle detection node that consolidates, into a single view, the various image processing steps, these being dense optical flow, ego-motion via RANSAC affine, residual image, and RANSAC inlier mask. Because I believe it will aid in understanding of the underlying dynamic obstacle detection detection logic, I have published a screen recording showing the output of this composite image during a dynamic obstacle approach maneuver--the simulation TurtleBot approaching a moving soda can.  
 
 ### Demonstration: TurtleBot Approaching a Dynamic Obstacle
 ![Demo](docs/demo.gif)
