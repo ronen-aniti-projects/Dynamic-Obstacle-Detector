@@ -61,7 +61,7 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq6.svg" alt="Substitution" width="400">
 </p>
 
-* Applying the assumption of negligible vertical translation $t_z$ between captured frames, we further simplify the center matrix to reveal an affine structure. Then, as a final step, we confirm that the resuling homography reduces to an affine transformation given the fact that $\mathbf{K}$ and $\mathbf{K}^{-1}$ are also affine and the fact that the composition of three affine transformations is always itself an affine transformation.
+* Applying the assumption of negligible vertical translation $t_z$ between captured frames, we further simplify the center matrix to reveal an affine structure. Then, as a final step, we confirm that the resulting homography reduces to an affine transformation given the fact that $\mathbf{K}$ and $\mathbf{K}^{-1}$ are also affine and the fact that the composition of three affine transformations is always itself an affine transformation.
 
 <p align="center">
   <img src="docs/affine.svg" alt="Affine" width="600">
@@ -118,7 +118,7 @@ python3-colcon-common-extensions
 ```
 
 ### Obtain and Build the Necessary ROS 2 Repositories
-The code I've developed in this repository, meant for dynamic obstacle detection, is a ROS 2 node designed to work together with the simulation developed by my instructor for this course, Dr. Tommy Chang. To get started, clone this repository, navigate to its `ros2_ws/src` subdirectory, the clone Dr. Chang's simulation. 
+The code I've developed in this repository, meant for dynamic obstacle detection, is a ROS 2 node designed to work together with the simulation developed by my instructor for this course, Dr. Tommy Chang. To get started, clone this repository, navigate to its `ros2_ws/src` subdirectory, then clone Dr. Chang's simulation. 
 ```
 git clone https://github.com/ronen-aniti-projects/Optical-Flow-Node.git
 cd Optical-Flow-Node/ros2_ws
