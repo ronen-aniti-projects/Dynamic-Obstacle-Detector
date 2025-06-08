@@ -1,4 +1,4 @@
-# Leveraging Dense Optical Flow and RANSAC-fitted Affine Homographies to Differentiate Robot Self-Motion from Dynamic Obstacle Motion in Monocular Camera Image Sequences
+# Leveraging Dense Optical Flow and RANSAC-Fitted Affine Homographies to Differentiate Robot Self-Motion from Dynamic Obstacle Motion in Monocular Camera Image Sequences
 
 ## Background
 In this project, I demonstrate the validity of an established method for dynamic obstacle detection with monocular camera images and dense optical flow. The method involves differentiating between a robot's self-motion and true dynamic obstacles by means of comparing, at each time step, dense optical flow to projections under RANSAC-fitted affine homographies. Although this project is largely preliminary, I focus on explaining the underlying premises of the approach, developing the mathematics, and performing exploratory testing with a model differential drive wheeled robot (TurtleBot 3) in simulation environment Gazebo. The mathematical assumptions developed henceforth are tied to the fact that the TurtleBot 3 operates on flat surfaces and has a fixed-pose, front-facing camera. 
@@ -101,7 +101,7 @@ We are realizing the following results and challenges:
 
 ## The Test-It-Yourself Instructions
 
-### Ensure Dependencies are Met
+### Ensure Dependencies Are Met
 This project requires Ubuntu 22.04, ROS 2 Humble, Python 3, as well as the following packages, available via `apt`:
 
 ```
