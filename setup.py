@@ -13,11 +13,15 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools'],
+    install_requires=[
+        'setuptools',
+        'opencv-python',
+        'numpy',
+    ],
     zip_safe=True,
     maintainer='ronen',
     maintainer_email='raniti@umd.edu',
-    description='TODO: Package description',
+    description='Dynamic obstacle detection with dense optical flow',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
