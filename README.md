@@ -118,16 +118,13 @@ python3-colcon-common-extensions
 ```
 
 ### Obtain and Build the Necessary ROS 2 Repositories
-The code I've developed in this repository, meant for dynamic obstacle detection, is a ROS 2 node designed to work together with the simulation developed by my instructor for this course, Dr. Tommy Chang. To get started, clone this repository, navigate to its `ros2_ws/src` subdirectory, then clone Dr. Chang's simulation. 
+The code I've developed in this repository, meant for dynamic obstacle detection, is a ROS 2 node designed to work together with the simulation developed by my instructor for this course, Dr. Tommy Chang. To get started, create a ROS 2 workspace, navigate to its source directory, clone both this repository and Dr. Chang's repository, then build both at once with `colcon`. 
 ```
+mkdir -p optical_ws/src
+cd optical_ws/src
 git clone https://github.com/ronen-aniti-projects/Optical-Flow-Node.git
-cd Optical-Flow-Node/ros2_ws
-cd src
 git clone https://github.com/TommyChangUMD/ENPM673_turtlebot_perception_challenge.git
-```
-
-With Dr. Chang's simulation repository cloned, navigate to the parent subdirectory (the ROS 2 workspace), then build both packages at once with `colcon`. 
-```
+cd ..
 colcon build --symlink-install
 ```
 
@@ -135,28 +132,19 @@ colcon build --symlink-install
 
 #### Terminal 1: Launch The Gazebo Simulation
 ```
-source /opt/ros/humble/setup.bash
-source /usr/share/gazebo/setup.bash
-source ~/turtlebot_perception_challenge/install/setup.bash
-source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
+source install/setup.bash
 ros2 launch enpm673_final_proj enpm673_world.launch.py verbose:=true
 ```
 
 #### Terminal 2: Run the Obstacle Detection ROS 2 Node
 ```
-source /opt/ros/humble/setup.bash
-source /usr/share/gazebo/setup.bash
-source ~/turtlebot_perception_challenge/install/setup.bash
-source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
+source install/setup.bash
 ros2 run dynamic_obstacle_detector detection_node
 ```
 
 #### Terminal 3: Run and Configure the ROS2 Teleoperation Node
 ```
-source /opt/ros/humble/setup.bash
-source /usr/share/gazebo/setup.bash
-source ~/turtlebot_perception_challenge/install/setup.bash
-source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
+source install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard \
   --ros-args -r /cmd_vel:=/input_cmd_vel
 ```
@@ -164,10 +152,7 @@ Importantly, in order to achieve accurate dynamic obstacle detections with the d
 
 #### Terminal 4: Run the ROS2 RQt Image Viewer Node
 ```
-source /opt/ros/humble/setup.bash
-source /usr/share/gazebo/setup.bash
-source ~/turtlebot_perception_challenge/install/setup.bash
-source ~/Optical-Flow-Node/ros2_ws/install/setup.bash
+source install/setup.bash
 ros2 run rqt_image_view rqt_image_view 
 ```
 
