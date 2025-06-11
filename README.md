@@ -20,7 +20,7 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq1.svg" alt="Equation1" width="100">
 </p>
 
-* The result is a ray indicating 3D direction in the reference frame of the camera before the motion step. We multiply this ray by the constant <img src="docs/zc1.svg" alt="ZC1" height="12"> to indicate a 3D image point. 
+* The result is an array of rays indicating 3D direction in the reference frame of the camera before the motion step. We multiply this array of rays by the constant <img src="docs/zc1.svg" alt="ZC1" height="12"> to indicate a 3D image point. 
 
 <p align="center">
   <img src="docs/eq2.svg" alt="Equation2" width="190">
@@ -71,7 +71,7 @@ The mathematics that explain the premise involves deriving a homographic transfo
 ## The Implementation
 The implementation involved the following:
 
-* Standardizing frames obtained from the TurtleBot robot through a resizing operation to reduce computational complexity and a crop around an ROI operation to enforce the planar assumption. 
+* Standardizing frames obtained from the TurtleBot robot through a resizing operation to reduce computational complexity and a crop-around-an-ROI operation to enforce the planar assumption. 
 * Computing the optical flow between successive frames using OpenCV’s Farneback Dense Optical Flow framework (`cv2.calcOpticalFlowFarneback()`) with the default recommended settings.
 * Developing an estimation affine 2x3 transformation matrix to model relative motion caused only by the robot’s own motion. This we accomplished with `cv2.estimateAffine2D()` set with RANSAC.
 * Developing a detection mask based on the reprojection error between the estimated affine transformation and the apparent motion computed with dense optical flow.
