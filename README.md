@@ -20,7 +20,7 @@ The mathematics that explain the premise involves deriving a homographic transfo
   <img src="docs/eq1.svg" alt="Equation1" width="100">
 </p>
 
-* The result is an array of rays indicating 3D direction in the reference frame of the camera before the motion step. We multiply this array of rays by the constant <img src="docs/zc1.svg" alt="ZC1" height="12"> to indicate a 3D image point. 
+* The result is an array of rays indicating 3D direction in the reference frame of the camera before the motion step. We multiply this array of rays by the constant <img src="docs/zc1.svg" alt="ZC1" height="12"> to transform the array of rays into an array of camera-frame 3D points. 
 
 <p align="center">
   <img src="docs/eq2.svg" alt="Equation2" width="190">
