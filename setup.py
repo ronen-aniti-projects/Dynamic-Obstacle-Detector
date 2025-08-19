@@ -6,7 +6,7 @@ package_name = 'dynamic_obstacle_detector'
 
 setup(
     name=package_name,
-    version='0.0.0',
+    version='0.1.0',
     packages=find_packages(exclude=['test']),
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -14,19 +14,17 @@ setup(
         ('share/' + package_name, ['package.xml']),
     ],
     install_requires=[
-        'setuptools',
-        'opencv-python',
-        'numpy',
+        'setuptools'
     ],
     zip_safe=True,
-    maintainer='ronen',
+    maintainer='Ronen Aniti',
     maintainer_email='raniti@umd.edu',
     description='Dynamic obstacle detection with dense optical flow',
-    license='TODO: License declaration',
+    license='MIT',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'detection_node = dynamic_obstacle_detector.main_node:main'
+            'detection_node = dynamic_obstacle_detector.detection_node:main'
         ],
     },
 )

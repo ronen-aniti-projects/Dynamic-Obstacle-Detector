@@ -102,29 +102,32 @@ We are realizing the following results and challenges:
 ## The Test-It-Yourself Instructions
 
 ### Ensure Dependencies Are Met
-This project requires Ubuntu 22.04, ROS 2 Humble, Python 3, as well as the following packages, available via `apt`:
+This project requires Ubuntu 22.04, ROS 2 Humble, Python 3, as well as the following build tools and simulation packages, available via `apt`:
 
 ```
-ros-humble-desktop
-ros-humble-gazebo*           
-ros-humble-turtlebot3 
-ros-humble-turtlebot3-gazebo  
-ros-humble-rqt-image-view  
-ros-humble-teleop-twist-keyboard  
-ros-humble-cv-bridge  
-ros-humble-image-transport  
-python3-opencv python3-numpy 
-python3-colcon-common-extensions  
+sudo apt update
+sudo apt install -y \
+python3-rosdep \
+python3-colcon-common-extensions \
+ros-humble-desktop \
+ros-humble-gazebo*  \
+ros-humble-turtlebot3 \
+ros-humble-turtlebot3-gazebo \
+ros-humble-rqt-image-view \
+ros-humble-teleop-twist-keyboard
 ```
+
 
 ### Obtain and Build the Necessary ROS 2 Repositories
-The code I've developed in this repository, meant for dynamic obstacle detection, is a ROS 2 node designed to work together with the simulation developed by my instructor for this course, Dr. Tommy Chang. To get started, create a ROS 2 workspace, navigate to its source directory, clone both this repository and Dr. Chang's repository, then build both at once with `colcon`. 
+The code I've developed in this repository, meant for dynamic obstacle detection, is a ROS 2 node designed to work together with the simulation developed by my instructor for this course, Dr. Tommy Chang. To get started, create a ROS 2 workspace, navigate to its source directory, clone both this repository and Dr. Chang's repository, resolve package-specific dependencies, then build both at once with `colcon`. 
 ```
 mkdir -p optical_ws/src
 cd optical_ws/src
 git clone https://github.com/ronen-aniti-projects/Optical-Flow-Node.git
 git clone https://github.com/TommyChangUMD/ENPM673_turtlebot_perception_challenge.git
 cd ..
+rosdep update
+rosdep install --from-paths src --ignore-src -r -y
 colcon build --symlink-install
 ```
 
@@ -133,6 +136,7 @@ colcon build --symlink-install
 #### Terminal 1: Launch The Gazebo Simulation
 ```
 source install/setup.bash
+source /usr/share/gazebo/setup.sh
 ros2 launch enpm673_final_proj enpm673_world.launch.py verbose:=true
 ```
 
@@ -148,7 +152,8 @@ source install/setup.bash
 ros2 run teleop_twist_keyboard teleop_twist_keyboard \
   --ros-args -r /cmd_vel:=/input_cmd_vel
 ```
-Importantly, in order to achieve accurate dynamic obstacle detections with the default detector configuration, set, using the `q/z/e/c` keyboard keys, the maximum linear velocity to `0.1 m/s` or lower and the maximum angular velocity to `0.1 rad/s` or lower. 
+
+Importantly, in order to achieve accurate dynamic obstacle detections with the default detector configuration, set, using the `q/z/e/c` keyboard keys, the maximum linear velocity to `0.1 m/s` or lower and the maximum angular velocity to `0.1 rad/s` or lower.
 
 #### Terminal 4: Run the ROS2 RQt Image Viewer Node
 ```
@@ -158,6 +163,9 @@ ros2 run rqt_image_view rqt_image_view
 
 ## Follow-Up: May 31, 2025: Recorded Demonstration: TurtleBot Approaching a Dynamic Obstacle
 On May 31, 2025, I published an update for the dynamic obstacle detection node that consolidates, into a single view, the various image processing steps, these being dense optical flow, ego-motion via RANSAC affine, residual image, and RANSAC inlier mask. Because I believe it will aid in understanding of the underlying dynamic obstacle detection detection logic, I have published a screen recording showing the output of this composite image during a dynamic obstacle approach maneuver—the simulation TurtleBot approaching a moving soda can.  
+
+## Follow-Up: Aug. 19, 2025: A Note on Performance 
+In testing this Dynamic Obstacle Detection ROS 2 package with the accompanying TurtleBot simulation package, I have observed that this Dynamic Obstacle Detection ROS 2 package is only reliable when the robot is moving at low velocities. After examining the resource files for the TurtleBot 3 simulation package, in particular, the `model.sdf` file for the `UMD TurtleBot 3 Waffle Pi` model, I discover that the simulated OAK-D camera is configured for a 10 Hz update rate. After I inspect the publish rate (`ros2 topic hz`) of the simulated OAK-D camera images (`/camera/image_raw`), I find that the publish rate closely matches the 10 Hz setting. After considering these facts, and after closely considering how I implemented this Dynamic Obstacle Detection ROS 2 node to publish not only a composite of multiple images demonstrating each intermediate RANSAC-fitted affine homography and Farneback Dense Optical Flow result, but also a commposite comprising each, I assert that this node only being reliable at low robot velocities is a direct result of the simulation configuration and my prioritizing publishing intermediate results in my implementation, rather than being a direct result of the conceptual approach itself.
 
 ### Demonstration: TurtleBot Approaching a Dynamic Obstacle
 ![Demo](docs/demo.gif)
